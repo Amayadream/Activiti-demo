@@ -2,9 +2,9 @@
 <%String path = request.getContextPath();%>
 <html>
 <head>
-    <title>Index</title>
+    <title>Login</title>
 </head>
 <body>
-<h2>Index Page~</h2>
+<h2>Login Page~</h2>
 </body>
 </html>
