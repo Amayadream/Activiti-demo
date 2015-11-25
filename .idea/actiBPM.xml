@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BPMNEditorStateService">
+    <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/interview.bpmn">
+      <view grid="false" />
+    </stateFile>
+    <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/a.bpmn">
+      <view grid="false" />
+    </stateFile>
+    <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/a.bpmn">
+      <view grid="false" />
+    </stateFile>
     <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/DemoProcess.bpmn">
       <view grid="false" />
     </stateFile>
+    <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/interview.bpmn">
+      <view grid="false" />
+    </stateFile>
     <stateFile url="file://$PROJECT_DIR$/src/main/resources/demo.bpmn">
+      <view grid="false" />
+    </stateFile>
+    <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/interview.bpmn">
       <view grid="false" />
     </stateFile>
     <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/DemoProcess.bpmn">
