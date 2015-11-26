@@ -34,12 +34,10 @@ public class AfterModifyApplyContentProcessor implements TaskListener {
         String processInstanceId = delegateTask.getProcessInstanceId();
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         Leave leave = leaveManager.getLeave(new Long(processInstance.getBusinessKey()));
-
         leave.setLeaveType((String) delegateTask.getVariable("leaveType"));
         leave.setStartTime((String) delegateTask.getVariable("startTime"));
         leave.setEndTime((String) delegateTask.getVariable("endTime"));
         leave.setReason((String) delegateTask.getVariable("reason"));
-
         leaveManager.saveLeave(leave);
     }
 
