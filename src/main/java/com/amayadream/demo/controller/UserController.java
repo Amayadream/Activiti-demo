@@ -1,13 +1,18 @@
 package com.amayadream.demo.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.amayadream.demo.pojo.User;
-import com.amayadream.demo.service.IUserService;
+import com.amayadream.demo.util.UserUtil;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.identity.Group;
+import org.activiti.engine.identity.User;
+import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -20,13 +25,53 @@ import java.util.List;
 @RequestMapping(value = "/user")
 public class UserController {
 
-    @Resource
-    private IUserService userService;
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @RequestMapping(value = "/all", produces = "application/json;charset:UTF-8")
-    @ResponseBody
-    public String all(){
-        List<User> list = userService.queryAll();
-        return JSON.toJSONString(list);
+    // Activiti Identify Service
+    private IdentityService identityService;
+
+    /**
+     * 登录系统
+     * @param userName
+     * @param password
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/logon")
+    public String logon(@RequestParam("username") String userName, @RequestParam("password") String password, HttpSession session) {
+        logger.debug("logon request: {username={}, password={}}", userName, password);
+        boolean checkPassword = identityService.checkPassword(userName, password);
+        if (checkPassword) {
+
+            // read user from database
+            User user = identityService.createUserQuery().userId(userName).singleResult();
+            UserUtil.saveUserToSession(session, user);
+
+            List<Group> groupList = identityService.createGroupQuery().groupMember(userName).list();
+            session.setAttribute("groups", groupList);
+
+            String[] groupNames = new String[groupList.size()];
+            for (int i = 0; i < groupNames.length; i++) {
+                System.out.println(groupList.get(i).getName());
+                groupNames[i] = groupList.get(i).getName();
+            }
+
+            session.setAttribute("groupNames", ArrayUtils.toString(groupNames));
+
+            return "redirect:/main/index";
+        } else {
+            return "redirect:/login?error=true";
+        }
+    }
+
+    @RequestMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "/login";
+    }
+
+    @Autowired
+    public void setIdentityService(IdentityService identityService) {
+        this.identityService = identityService;
     }
 }

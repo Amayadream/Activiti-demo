@@ -26,6 +26,19 @@
       <!-- 表示开发的时候引入，发布的时候不会加载此包 -->
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>18.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jodd</groupId>
+      <artifactId>jodd-core</artifactId>
+      <version>3.6.7</version>
+    </dependency>
+
     <!-- spring核心包 -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -78,6 +91,12 @@
       <artifactId>spring-test</artifactId>
       <version>${spring.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-commons-core</artifactId>
+      <version>1.4.1.RELEASE</version>
+    </dependency>
     <!-- mybatis核心包 -->
     <dependency>
       <groupId>org.mybatis</groupId>
@@ -125,6 +144,13 @@
       <artifactId>commons-dbcp</artifactId>
       <version>1.2.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.2</version>
+    </dependency>
+
     <!-- JSTL标签类 -->
     <dependency>
       <groupId>jstl</groupId>

@@ -2,9 +2,9 @@
 <%String path = request.getContextPath();%>
 <html>
 <head>
-    <title>Title</title>
+    <title>404 - 页面不存在</title>
 </head>
 <body>
-<h1>ERROR,404 not found</h1>
+<h1>ERROR,PAGE IS NOT FOUND~</h1>
 </body>
 </html>
