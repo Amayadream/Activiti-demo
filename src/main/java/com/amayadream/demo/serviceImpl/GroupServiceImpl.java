@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * Date   :  2015.11.30 15:39
  * TODO   :
  */
-@Service("userService")
-public class UserServiceImpl {
+@Service("groupService")
+public class GroupServiceImpl {
 }

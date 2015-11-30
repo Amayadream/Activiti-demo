@@ -24,7 +24,7 @@
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <!-- 表示开发的时候引入，发布的时候不会加载此包 -->
-      <scope>test</scope>
+      <!--<scope>test</scope>-->
     </dependency>
 
     <dependency>
@@ -135,8 +135,6 @@
       <artifactId>ojdbc6</artifactId>
       <version>1.0.0</version>
     </dependency>
-
-
 
     <!-- 导入dbcp的jar包，用来在applicationContext.xml中配置数据库 -->
     <dependency>

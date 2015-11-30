@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * Date   :  2015.11.30 15:38
  * TODO   :
  */
-@Service("userDao")
-public interface IUserDao {
+@Service("groupDao")
+public interface IGroupDao {
 }

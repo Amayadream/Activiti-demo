@@ -6,7 +6,7 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" >
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE?useUnicode=true&amp;characterEncoding=utf8" />
         <property name="username" value="activitidemo" />
         <property name="password" value="activitidemo" />
         <property name="defaultAutoCommit" value="false" />

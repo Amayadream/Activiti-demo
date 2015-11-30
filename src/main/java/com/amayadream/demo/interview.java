@@ -18,7 +18,7 @@ public class interview {
         ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.xml").buildProcessEngine();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         RuntimeService runtimeService = processEngine.getRuntimeService();
-        repositoryService.createDeployment().addClasspathResource("diagrams/interview.bpmn").deploy();
+        repositoryService.createDeployment().addClasspathResource("diagrams/interview/interview.bpmn").deploy();
         String processId = runtimeService.startProcessInstanceByKey("Interview").getId();
 
         TaskService taskService = processEngine.getTaskService();

@@ -1,5 +1,4 @@
 package com.amayadream.demo.pojo;
-
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -9,139 +8,88 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 
 /**
- * NAME   :  Activiti-demo/com.amayadream.demo.pojo
+ * NAME   :  Activiti-demo/com.amayadream.demo.dao
  * Author :  Amayadream
- * Date   :  2015.11.26 10:34
- * TODO   :  Leave表的实体类
+ * Date   :  2015.11.30 15:15
+ * TODO   :
  */
 @Repository("leave")
 public class Leave {
-    /**
-     * 编号
-     */
-    private int id;
+    private String id;                  //ID,sys_guid()自动生成
+    private String processinstanceid;   //流程ID
+    private String userid;              //工号
+    private String starttime;           //开始时间
+    private String endtime;             //结束时间
+    private String leavetype;           //假种
+    private String reason;              //请假事由
+    private String applytime;           //申请时间
+    private String realitystarttime;    //实际开始时间
+    private String realityendtime;      //实际结束时间
 
-    /**
-     * 流程编号
-     */
-    private String processInstanceId;
-
-    /**
-     * 工号
-     */
-    private String userId;
-
-    /**
-     * 开始时间
-     */
-    private String startTime;
-
-    /**
-     * 结束时间
-     */
-    private String endTime;
-
-    /**
-     * 假种
-     */
-    private String leaveType;
-
-    /**
-     * 请假事由
-     */
-    private String reason;
-
-    /**
-     * 申请时间
-     */
-    private String applyTime;
-
-    /**
-     * 实际开始时间
-     */
-    private String realityStartTime;
-
-    /**
-     * 实际结束时间
-     */
-    private String realityEndTime;
-
-
-    //-- 临时属性开始 --//
-
-    /**
-     * 流程任务
-     */
+    // 流程任务
     private Task task;
 
     private Map<String, Object> variables;
 
-    /**
-     * 运行中的流程实例
-     */
+    // 运行中的流程实例
     private ProcessInstance processInstance;
 
-    /**
-     * 历史的流程实例
-     */
+    // 历史的流程实例
     private HistoricProcessInstance historicProcessInstance;
 
-    /**
-     * 流程定义
-     */
+    // 流程定义
     private ProcessDefinition processDefinition;
-
-    //-- 临时属性结束 --//
 
     /**
      * getter&setter
+     * @return
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getProcessInstanceId() {
-        return processInstanceId;
+    public String getProcessinstanceid() {
+        return processinstanceid;
     }
 
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
+    public void setProcessinstanceid(String processinstanceid) {
+        this.processinstanceid = processinstanceid;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserid() {
+        return userid;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getStarttime() {
+        return starttime;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setStarttime(String starttime) {
+        this.starttime = starttime;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getEndtime() {
+        return endtime;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setEndtime(String endtime) {
+        this.endtime = endtime;
     }
 
-    public String getLeaveType() {
-        return leaveType;
+    public String getLeavetype() {
+        return leavetype;
     }
 
-    public void setLeaveType(String leaveType) {
-        this.leaveType = leaveType;
+    public void setLeavetype(String leavetype) {
+        this.leavetype = leavetype;
     }
 
     public String getReason() {
@@ -152,28 +100,28 @@ public class Leave {
         this.reason = reason;
     }
 
-    public String getApplyTime() {
-        return applyTime;
+    public String getApplytime() {
+        return applytime;
     }
 
-    public void setApplyTime(String applyTime) {
-        this.applyTime = applyTime;
+    public void setApplytime(String applytime) {
+        this.applytime = applytime;
     }
 
-    public String getRealityStartTime() {
-        return realityStartTime;
+    public String getRealitystarttime() {
+        return realitystarttime;
     }
 
-    public void setRealityStartTime(String realityStartTime) {
-        this.realityStartTime = realityStartTime;
+    public void setRealitystarttime(String realitystarttime) {
+        this.realitystarttime = realitystarttime;
     }
 
-    public String getRealityEndTime() {
-        return realityEndTime;
+    public String getRealityendtime() {
+        return realityendtime;
     }
 
-    public void setRealityEndTime(String realityEndTime) {
-        this.realityEndTime = realityEndTime;
+    public void setRealityendtime(String realityendtime) {
+        this.realityendtime = realityendtime;
     }
 
     public Task getTask() {

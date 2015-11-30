@@ -7,12 +7,11 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.pojo
  * Author :  Amayadream
- * Date   :  2015.11.26 10:46
- * TODO   :  Activiti中ACT_ID_GROUP表的实体类
+ * Date   :  2015.11.30 15:30
+ * TODO   :
  */
 @Repository("group")
 public class Group {
-
     private String id;
     private String name;
     private String type;
@@ -20,6 +19,7 @@ public class Group {
 
     /**
      * getter&setter
+     * @return
      */
     public String getId() {
         return id;

@@ -5,12 +5,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * NAME   :  SSM-demo/com.amayadream.demo.pojo
+ * NAME   :  Activiti-demo/com.amayadream.demo.pojo
  * Author :  Amayadream
- * Date   :  2015.11.21 23:17
- * TODO   :  Activiti中ACT_ID_USER表的实体类
+ * Date   :  2015.11.30 15:30
+ * TODO   :
  */
-
 @Repository("user")
 public class User {
     private String id;
@@ -22,6 +21,7 @@ public class User {
 
     /**
      * getter&setter
+     * @return
      */
     public String getId() {
         return id;
