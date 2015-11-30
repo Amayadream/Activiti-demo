@@ -1,6 +1,9 @@
 package com.amayadream.demo.service;
 
-import org.springframework.stereotype.Service;
+
+import com.amayadream.demo.pojo.Leave;
+
+import java.util.List;
 
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.service
@@ -9,4 +12,8 @@ import org.springframework.stereotype.Service;
  * TODO   :
  */
 public interface ILeaveService {
+    List<Leave> selectAll();
+    Leave selectLeaveById(String id);
+    boolean insert(Leave leave);
+    boolean update(Leave leave);
 }

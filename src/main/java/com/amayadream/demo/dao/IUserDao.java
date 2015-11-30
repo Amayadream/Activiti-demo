@@ -1,6 +1,9 @@
 package com.amayadream.demo.dao;
 
+import com.amayadream.demo.pojo.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.dao
@@ -10,4 +13,8 @@ import org.springframework.stereotype.Service;
  */
 @Service("userDao")
 public interface IUserDao {
+    List<User> selectAll();
+    User selectUserById(String id);
+    boolean insert(User user);
+    boolean update(User user);
 }

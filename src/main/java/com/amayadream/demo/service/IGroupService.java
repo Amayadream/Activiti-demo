@@ -1,6 +1,8 @@
 package com.amayadream.demo.service;
 
-import org.springframework.stereotype.Service;
+import com.amayadream.demo.pojo.Group;
+
+import java.util.List;
 
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.service
@@ -10,4 +12,8 @@ import org.springframework.stereotype.Service;
  */
 
 public interface IGroupService {
+    List<Group> selectAll();
+    Group selectGroupById(String id);
+    boolean insert(Group group);
+    boolean update(Group group);
 }

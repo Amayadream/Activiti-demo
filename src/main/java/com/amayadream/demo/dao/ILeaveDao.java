@@ -1,6 +1,9 @@
 package com.amayadream.demo.dao;
 
+import com.amayadream.demo.pojo.Leave;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.dao
@@ -9,6 +12,9 @@ import org.springframework.stereotype.Service;
  * TODO   :
  */
 @Service("leaveDao")
-public interface ILeaveDao {
-
+public interface ILeaveDao{
+    List<Leave> selectAll();
+    Leave selectLeaveById(String id);
+    boolean insert(Leave leave);
+    boolean update(Leave leave);
 }

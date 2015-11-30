@@ -1,6 +1,9 @@
 package com.amayadream.demo.dao;
 
+import com.amayadream.demo.pojo.Group;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.dao
@@ -10,4 +13,8 @@ import org.springframework.stereotype.Service;
  */
 @Service("groupDao")
 public interface IGroupDao {
+    List<Group> selectAll();
+    Group selectGroupById(String id);
+    boolean insert(Group group);
+    boolean update(Group group);
 }
