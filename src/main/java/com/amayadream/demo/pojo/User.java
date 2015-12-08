@@ -7,10 +7,10 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.pojo
  * Author :  Amayadream
- * Date   :  2015.11.30 15:30
+ * Date   :  2015.12.08 14:40
  * TODO   :
  */
-@Repository("user")
+@Repository
 public class User {
     private String id;
     private String email;

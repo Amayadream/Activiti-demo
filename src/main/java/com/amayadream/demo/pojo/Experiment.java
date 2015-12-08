@@ -1,4 +1,5 @@
 package com.amayadream.demo.pojo;
+
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -8,37 +9,26 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 
 /**
- * NAME   :  Activiti-demo/com.amayadream.demo.dao
+ * NAME   :  Activiti-demo/com.amayadream.demo.pojo
  * Author :  Amayadream
- * Date   :  2015.11.30 15:15
+ * Date   :  2015.12.08 14:29
  * TODO   :
  */
-@Repository("leave")
-public class Leave {
-    private String id;                  //ID,sys_guid()自动生成
-    private String processinstanceid;   //流程ID
-    private String userid;              //工号
+@Repository
+public class Experiment {
+    private String id;                  //实验编号
+    private String userid;              //用户编号
+    private String processinstanceid;   //流程编号
+    private String taskid;              //当前节点
     private String starttime;           //开始时间
     private String endtime;             //结束时间
-    private String leavetype;           //假种
-    private String reason;              //请假事由
-    private String applytime;           //申请时间
-    private String realitystarttime;    //实际开始时间
-    private String realityendtime;      //实际结束时间
 
-    // 流程任务
-    private Task task;
-
-    private Map<String, Object> variables;
-
-    // 运行中的流程实例
-    private ProcessInstance processInstance;
-
-    // 历史的流程实例
-    private HistoricProcessInstance historicProcessInstance;
-
-    // 流程定义
-    private ProcessDefinition processDefinition;
+    // -- 临时属性 -- //
+    private Task task;       //流程任务
+    private Map<String, Object> variables;      //
+    private ProcessInstance processInstance;    //运行中的流程实例
+    private HistoricProcessInstance historicProcessInstance;    //历史的流程实例
+    private ProcessDefinition processDefinition;    //流程定义
 
     /**
      * getter&setter
@@ -52,6 +42,14 @@ public class Leave {
         this.id = id;
     }
 
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
     public String getProcessinstanceid() {
         return processinstanceid;
     }
@@ -60,12 +58,12 @@ public class Leave {
         this.processinstanceid = processinstanceid;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getTaskid() {
+        return taskid;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setTaskid(String taskid) {
+        this.taskid = taskid;
     }
 
     public String getStarttime() {
@@ -82,46 +80,6 @@ public class Leave {
 
     public void setEndtime(String endtime) {
         this.endtime = endtime;
-    }
-
-    public String getLeavetype() {
-        return leavetype;
-    }
-
-    public void setLeavetype(String leavetype) {
-        this.leavetype = leavetype;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getApplytime() {
-        return applytime;
-    }
-
-    public void setApplytime(String applytime) {
-        this.applytime = applytime;
-    }
-
-    public String getRealitystarttime() {
-        return realitystarttime;
-    }
-
-    public void setRealitystarttime(String realitystarttime) {
-        this.realitystarttime = realitystarttime;
-    }
-
-    public String getRealityendtime() {
-        return realityendtime;
-    }
-
-    public void setRealityendtime(String realityendtime) {
-        this.realityendtime = realityendtime;
     }
 
     public Task getTask() {

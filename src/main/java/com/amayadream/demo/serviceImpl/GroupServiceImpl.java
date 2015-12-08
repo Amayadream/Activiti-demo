@@ -11,13 +11,13 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.serviceImpl
  * Author :  Amayadream
- * Date   :  2015.11.30 15:39
+ * Date   :  2015.12.08 15:21
  * TODO   :
  */
 @Service("groupService")
 public class GroupServiceImpl implements IGroupService {
-    @Resource
-    private IGroupDao groupDao;
+    @Resource private IGroupDao groupDao;
+    @Resource private Group group;
 
     public List<Group> selectAll() {
         return groupDao.selectAll();
@@ -27,11 +27,20 @@ public class GroupServiceImpl implements IGroupService {
         return groupDao.selectGroupById(id);
     }
 
-    public boolean insert(Group group) {
+    public boolean insert(String name, String type) {
+        group.setName(name);
+        group.setType(type);
         return groupDao.insert(group);
     }
 
-    public boolean update(Group group) {
+    public boolean update(String id, String name, String type) {
+        group.setId(id);
+        group.setName(name);
+        group.setType(type);
         return groupDao.update(group);
+    }
+
+    public boolean delete(String id) {
+        return groupDao.delete(id);
     }
 }

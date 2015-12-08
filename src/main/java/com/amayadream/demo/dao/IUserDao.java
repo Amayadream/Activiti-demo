@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.dao
  * Author :  Amayadream
- * Date   :  2015.11.30 15:38
+ * Date   :  2015.12.08 14:49
  * TODO   :
  */
 @Service("userDao")
@@ -17,4 +17,5 @@ public interface IUserDao {
     User selectUserById(String id);
     boolean insert(User user);
     boolean update(User user);
+    boolean delete(String id);
 }

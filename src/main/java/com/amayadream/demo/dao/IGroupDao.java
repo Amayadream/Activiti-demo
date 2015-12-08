@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.dao
  * Author :  Amayadream
- * Date   :  2015.11.30 15:38
+ * Date   :  2015.12.08 15:14
  * TODO   :
  */
 @Service("groupDao")
@@ -17,4 +17,5 @@ public interface IGroupDao {
     Group selectGroupById(String id);
     boolean insert(Group group);
     boolean update(Group group);
+    boolean delete(String id);
 }

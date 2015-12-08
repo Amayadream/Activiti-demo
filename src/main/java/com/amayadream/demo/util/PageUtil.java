@@ -5,21 +5,22 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * NAME   :  Activiti-demo/com.amayadream.demo.util
- * Author :  Amayadream
- * Date   :  2015.11.26 15:18
- * TODO   :  分页工具
+ * 分页工具
+ * 
+ * @author henryyan
  */
 public class PageUtil {
-    public static int PAGE_SIZE = 15;
 
-    public static int[] init(Page<?> page, HttpServletRequest request) {
-        int pageNumber = Integer.parseInt(StringUtils.defaultIfBlank(request.getParameter("p"), "1"));
-        page.setPageNo(pageNumber);
-        int pageSize = Integer.parseInt(StringUtils.defaultIfBlank(request.getParameter("ps"), String.valueOf(PAGE_SIZE)));
-        page.setPageSize(pageSize);
-        int firstResult = page.getFirst() - 1;
-        int maxResults = page.getPageSize();
-        return new int[] {firstResult, maxResults};
-    }
+  public static int PAGE_SIZE = 3;
+
+  public static int[] init(Page<?> page, HttpServletRequest request) {
+    int pageNumber = Integer.parseInt(StringUtils.defaultIfBlank(request.getParameter("p"), "1"));
+    page.setPageNo(pageNumber);
+    int pageSize = Integer.parseInt(StringUtils.defaultIfBlank(request.getParameter("ps"), String.valueOf(PAGE_SIZE)));
+    page.setPageSize(pageSize);
+    int firstResult = page.getFirst() - 1;
+    int maxResults = page.getPageSize();
+    return new int[] {firstResult, maxResults};
+  }
+
 }

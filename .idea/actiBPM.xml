@@ -4,5 +4,8 @@
     <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/experiment/experiment.bpmn">
       <view grid="false" />
     </stateFile>
+    <stateFile url="file://$PROJECT_DIR$/src/main/resources/diagrams/interview/interview.bpmn">
+      <view grid="false" />
+    </stateFile>
   </component>
 </project>

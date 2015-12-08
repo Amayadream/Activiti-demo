@@ -15,7 +15,8 @@ import java.util.List;
 public class interview {
     public static void main(String[] args) {
         // 加载配置文件
-        ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.xml").buildProcessEngine();
+//        ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.xml").buildProcessEngine();
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         RuntimeService runtimeService = processEngine.getRuntimeService();
         repositoryService.createDeployment().addClasspathResource("diagrams/interview/interview.bpmn").deploy();

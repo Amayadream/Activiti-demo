@@ -11,13 +11,13 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.serviceImpl
  * Author :  Amayadream
- * Date   :  2015.11.30 15:39
+ * Date   :  2015.12.08 14:51
  * TODO   :
  */
 @Service("userService")
 public class UserServiceImpl implements IUserService {
-    @Resource
-    private IUserDao userDao;
+    @Resource private IUserDao userDao;
+    @Resource private User user;
 
     public List<User> selectAll() {
         return userDao.selectAll();
@@ -27,11 +27,24 @@ public class UserServiceImpl implements IUserService {
         return userDao.selectUserById(id);
     }
 
-    public boolean insert(User user) {
+    public boolean insert(String email, String first, String last, String password) {
+        user.setEmail(email);
+        user.setFirst(first);
+        user.setLast(last);
+        user.setPassword(password);
         return userDao.insert(user);
     }
 
-    public boolean update(User user) {
+    public boolean update(String id, String email, String first, String last, String password) {
+        user.setId(id);
+        user.setEmail(email);
+        user.setFirst(first);
+        user.setLast(last);
+        user.setPassword(password);
         return userDao.update(user);
+    }
+
+    public boolean delete(String id) {
+        return userDao.delete(id);
     }
 }
