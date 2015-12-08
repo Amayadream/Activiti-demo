@@ -14,7 +14,7 @@ public interface IExperimentService {
     List<Experiment> selectAll();
     Experiment selectExperimentById(String id);
     Experiment selectExperimentByUserid(String userid);
-    boolean insert(String userid, String processinstanceid, String taskid, String starttime, String endtime);
-    boolean update(String id, String userid, String processinstanceid, String taskid, String starttime, String endtime);
+    boolean insert(Experiment experiment);
+    boolean update(Experiment experiment);
     boolean delete(String id);
 }

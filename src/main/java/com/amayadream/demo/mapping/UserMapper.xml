@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.amayadream.demo.dao.IUserDao" >
+
+	<resultMap id="BaseResultMap" type="com.amayadream.demo.pojo.User" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="EMAIL_" property="email" jdbcType="VARCHAR" />
+		<result column="FIRST_" property="first" jdbcType="VARCHAR" />
+		<result column="LAST_" property="last" jdbcType="VARCHAR" />
+		<result column="PASSWORD_" property="password" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		ID_, EMAIL_, FIRST_, LAST_, PASSWORD_
+	</sql>
+
+	<!-- 查询所有用户 -->
+	<select id="selectAll" resultMap="BaseResultMap" >
+		SELECT <include refid="Base_Column_List" />
+		FROM ACT_ID_USER
+	</select>
+
+	<!-- 根据用户id查询用户 -->
+	<select id="selectUserById" resultMap="BaseResultMap" parameterType="string" >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ACT_ID_USER
+		WHERE ID = #{id, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 插入用户 -->
+	<insert id="insert" parameterType="com.amayadream.demo.pojo.User" >
+		INSERT INTO ACT_ID_USER (ID_, EMAIL_, FIRST_, LAST_ ,PASSWORD_)
+		VALUES (sys_guid(), #{email, jdbcType=VARCHAR}, #{first, jdbcType=VARCHAR}, #{last, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 更新用户 -->
+	<update id="update" parameterType="com.amayadream.demo.pojo.User">
+		UPDATE ACT_ID_USER
+		SET EMAIL_ = #{username, jdbcType=VARCHAR}, FIRST_ = #{password, jdbcType=VARCHAR}, LAST_ = #{email, jdbcType=VARCHAR}, PASSWORD_ = #{password, jdbcType=VARCHAR}
+		WHERE ID_ = #{id, jdbcType=VARCHAR}
+	</update>
+
+	<!-- 删除用户 -->
+	<delete id="delete" parameterType="string" >
+		DELETE FROM ACT_ID_USER
+		WHERE ID_ = #{id, jdbcType=VARCHAR}
+	</delete>
+
+</mapper>

@@ -31,22 +31,11 @@ public class ExperimentServiceImpl implements IExperimentService {
         return experimentDao.selectExperimentByUserid(userid);
     }
 
-    public boolean insert(String userid, String processinstanceid, String taskid, String starttime, String endtime) {
-        experiment.setUserid(userid);
-        experiment.setProcessinstanceid(processinstanceid);
-        experiment.setTaskid(taskid);
-        experiment.setStarttime(starttime);
-        experiment.setEndtime(endtime);
+    public boolean insert(Experiment experiment) {
         return experimentDao.insert(experiment);
     }
 
-    public boolean update(String id, String userid, String processinstanceid, String taskid, String starttime, String endtime) {
-        experiment.setId(id);
-        experiment.setUserid(userid);
-        experiment.setProcessinstanceid(processinstanceid);
-        experiment.setTaskid(taskid);
-        experiment.setStarttime(starttime);
-        experiment.setEndtime(endtime);
+    public boolean update(Experiment experiment) {
         return experimentDao.update(experiment);
     }
 

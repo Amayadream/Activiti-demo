@@ -1,4 +1,4 @@
-package com.amayadream.demo.activiti.service;
+package com.amayadream.demo.activiti.service.activiti;
 
 import com.amayadream.demo.util.WorkflowUtils;
 import org.activiti.engine.IdentityService;

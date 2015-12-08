@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.amayadream.demo.dao.IExperimentDao" >
+
+	<resultMap id="BaseResultMap" type="com.amayadream.demo.pojo.Experiment" >
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="USERID" property="userid" jdbcType="VARCHAR" />
+		<result column="PROCESSINSTANCEID" property="processinstanceid" jdbcType="VARCHAR" />
+		<result column="TASKID" property="taskid" jdbcType="VARCHAR" />
+		<result column="STARTTIME" property="starttime" jdbcType="VARCHAR" />
+		<result column="ENDTIME" property="endtime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		ID, USERID, PROCESSINSTANCEID, TASKID, STARTTIME, ENDTIME
+	</sql>
+
+	<!-- 查询所有用户 -->
+	<select id="selectAll" resultMap="BaseResultMap" >
+		SELECT <include refid="Base_Column_List" />
+		FROM EXPERIMENT
+	</select>
+
+	<!-- 根据用户id查询用户 -->
+	<select id="selectExperimentById" resultMap="BaseResultMap" parameterType="string" >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM EXPERIMENT
+		WHERE ID = #{id, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 根据用户id查询用户 -->
+	<select id="selectExperimentByUserid" resultMap="BaseResultMap" parameterType="string" >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM EXPERIMENT
+		WHERE ID = #{id, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 插入用户 -->
+	<insert id="insert" parameterType="com.amayadream.demo.pojo.User" >
+		INSERT INTO EXPERIMENT (ID, USERID, PROCESSINSTANCEID, TASKID ,STARTTIME, ENDTIME)
+		VALUES (sys_guid(), #{userid, jdbcType=VARCHAR}, #{processinstanceid, jdbcType=VARCHAR}, #{taskid, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 更新用户 -->
+	<update id="update" parameterType="com.amayadream.demo.pojo.User">
+		UPDATE EXPERIMENT
+		SET USERID = #{userid, jdbcType=VARCHAR}, PROCESSINSTANCEID = #{processinstanceid, jdbcType=VARCHAR}, TASKID = #{taskid, jdbcType=VARCHAR}, STARTTIME = #{starttime, jdbcType=VARCHAR}, ENDTIME = #{endtime, jdbcType=VARCHAR}
+		WHERE id = #{id, jdbcType=VARCHAR}
+	</update>
+
+	<!-- 删除用户 -->
+	<delete id="delete" parameterType="string" >
+		DELETE FROM EXPERIMENT
+		WHERE ID = #{id, jdbcType=VARCHAR}
+	</delete>
+
+</mapper>

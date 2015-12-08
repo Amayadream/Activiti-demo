@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.amayadream.demo.dao.IGroupDao" >
+
+	<resultMap id="BaseResultMap" type="com.amayadream.demo.pojo.Group" >
+		<id column="ID_" property="id" jdbcType="VARCHAR" />
+		<result column="NAME_" property="name" jdbcType="VARCHAR" />
+		<result column="TYPE_" property="type" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		ID_, NAME_, TYPE_
+	</sql>
+
+	<!-- 查询所有用户 -->
+	<select id="selectAll" resultMap="BaseResultMap" >
+		SELECT <include refid="Base_Column_List" />
+		FROM ACT_ID_GROUP
+	</select>
+
+	<!-- 根据用户id查询用户 -->
+	<select id="selectGroupById" resultMap="BaseResultMap" parameterType="string" >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ACT_ID_GROUP
+		WHERE ID_ = #{id, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 插入用户 -->
+	<insert id="insert" parameterType="com.amayadream.demo.pojo.Group" >
+		INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
+		VALUES (sys_guid(), #{name, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 更新用户 -->
+	<update id="update" parameterType="com.amayadream.demo.pojo.Group">
+		UPDATE ACT_ID_GROUP
+		SET NAME_ = #{name, jdbcType=VARCHAR}, TYPE_ = #{type, jdbcType=VARCHAR}
+		WHERE id = #{id, jdbcType=VARCHAR}
+	</update>
+
+	<!-- 删除用户 -->
+	<delete id="delete" parameterType="string" >
+		DELETE FROM ACT_ID_GROUP
+		WHERE ID_ = #{id, jdbcType=VARCHAR}
+	</delete>
+
+</mapper>
