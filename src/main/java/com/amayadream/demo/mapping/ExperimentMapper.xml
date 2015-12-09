@@ -46,7 +46,20 @@
 	<!-- 更新用户 -->
 	<update id="update" parameterType="com.amayadream.demo.pojo.User">
 		UPDATE EXPERIMENT
-		SET USERID = #{userid, jdbcType=VARCHAR}, PROCESSINSTANCEID = #{processinstanceid, jdbcType=VARCHAR}, TASKID = #{taskid, jdbcType=VARCHAR}, STARTTIME = #{starttime, jdbcType=VARCHAR}, ENDTIME = #{endtime, jdbcType=VARCHAR}
+		<set>
+			<if test="USERID != null and USERID != ''">
+				USERID = #{userid, jdbcType=VARCHAR},
+			</if>
+			<if test="PROCESSINSTANCEID != null and PROCESSINSTANCEID != ''">
+				PROCESSINSTANCEID = #{processinstanceid, jdbcType=VARCHAR},
+			</if>
+			<if test="STARTTIME != null and STARTTIME != ''">
+				STARTTIME = #{starttime, jdbcType=VARCHAR},
+			</if>
+			<if test="ENDTIME != null and ENDTIME != ''">
+				ENDTIME = #{endtime, jdbcType=VARCHAR},
+			</if>
+		</set>
 		WHERE id = #{id, jdbcType=VARCHAR}
 	</update>
 

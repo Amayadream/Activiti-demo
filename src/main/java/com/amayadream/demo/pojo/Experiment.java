@@ -19,7 +19,6 @@ public class Experiment {
     private String id;                  //实验编号
     private String userid;              //用户编号
     private String processinstanceid;   //流程编号
-    private String taskid;              //当前节点
     private String starttime;           //开始时间
     private String endtime;             //结束时间
 
@@ -56,14 +55,6 @@ public class Experiment {
 
     public void setProcessinstanceid(String processinstanceid) {
         this.processinstanceid = processinstanceid;
-    }
-
-    public String getTaskid() {
-        return taskid;
-    }
-
-    public void setTaskid(String taskid) {
-        this.taskid = taskid;
     }
 
     public String getStarttime() {

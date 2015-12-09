@@ -8,6 +8,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -19,8 +20,10 @@ import java.util.List;
  * Date   :  2015.12.08 16:18
  * TODO   :
  */
-public class LoginControoler {
-    private static Logger logger = LoggerFactory.getLogger(LoginControoler.class);
+@Controller
+@RequestMapping(value = "/user")
+public class LoginController {
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired private IdentityService identityService;
 
@@ -42,16 +45,13 @@ public class LoginControoler {
             //读取用户组
             List<Group> groupList = identityService.createGroupQuery().groupMember(username).list();
             session.setAttribute("groups", groupList);
-
             String[] groupnames = new String[groupList.size()];
             for (int i = 0; i < groupnames.length; i++) {
                 System.out.println(groupList.get(i).getName());
                 groupnames[i] = groupList.get(i).getName();
             }
-
-            session.setAttribute("groupNames", ArrayUtils.toString(groupnames));
-
-            return "redirect:/main/index";
+            session.setAttribute("groupnames", ArrayUtils.toString(groupnames));
+            return "redirect:/show";
         } else {
             return "redirect:/login?error=true";
         }

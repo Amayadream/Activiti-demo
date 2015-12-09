@@ -3,18 +3,19 @@ package com.amayadream.demo.activiti.controller.experiment;
 import com.amayadream.demo.activiti.service.experiment.ExperimentWorkflowService;
 import com.amayadream.demo.pojo.Experiment;
 import com.amayadream.demo.service.IExperimentService;
-import com.amayadream.demo.util.Page;
-import com.amayadream.demo.util.PageUtil;
-import com.amayadream.demo.util.UserUtil;
-import com.amayadream.demo.util.Variable;
+import com.amayadream.demo.util.*;
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.identity.User;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +28,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipInputStream;
 
 /**
  * 请假控制器，包含保存、启动流程
@@ -36,13 +41,14 @@ import java.util.Map;
  * @author HenryYan
  */
 @Controller
-@RequestMapping(value = "/oa/leave")
+@RequestMapping(value = "/experiment")
 public class ExperimentController {
 
   private Logger logger = LoggerFactory.getLogger(getClass());
   @Autowired protected ExperimentWorkflowService workflowService;
   @Autowired protected RuntimeService runtimeService;
   @Autowired protected TaskService taskService;
+  @Autowired protected RepositoryService repositoryService;
 
   @Resource private IExperimentService experimentService;
 
@@ -52,12 +58,22 @@ public class ExperimentController {
     return "/oa/leave/leaveApply";
   }
 
+  @RequestMapping(value = "deploy")
+  public String deploy(RedirectAttributes redirectAttributes){
+    repositoryService.createDeployment().name("experiment")
+                                        .addClasspathResource("diagrams/experiment/experiment.bpmn")
+                                        .addClasspathResource("diagrams/experiment/experiment.png")
+                                        .deploy();
+    redirectAttributes.addFlashAttribute("message","部署成功");
+    return "redirect:/show";
+  }
+
   /**
-   * 启动请假流程
+   * 启动实验流程
    * 
    * @param experiment
    */
-  @RequestMapping(value = "start", method = RequestMethod.POST)
+  @RequestMapping(value = "start")
   public String startWorkflow(Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
     try {
       User user = UserUtil.getUserFromSession(session);
@@ -70,22 +86,22 @@ public class ExperimentController {
         logger.warn("没有部署流程!", e);
         redirectAttributes.addFlashAttribute("error", "没有部署流程，请在[工作流]->[流程管理]页面点击<重新部署流程>");
       } else {
-        logger.error("启动请假流程失败：", e);
+        logger.error("启动实验流程失败：", e);
         redirectAttributes.addFlashAttribute("error", "系统内部错误！");
       }
     } catch (Exception e) {
-      logger.error("启动请假流程失败：", e);
+      logger.error("启动实验流程失败：", e);
       redirectAttributes.addFlashAttribute("error", "系统内部错误！");
     }
-    return "redirect:/oa/leave/apply";
+    return "redirect:/show";
   }
 
   /**
    * 任务列表
    */
-  @RequestMapping(value = "list/task")
+  @RequestMapping(value = "/list/task")
   public ModelAndView taskList(HttpSession session, HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/oa/leave/taskList");
+    ModelAndView mav = new ModelAndView("/show");
     Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     String userId = UserUtil.getUserFromSession(session).getId();
@@ -101,7 +117,7 @@ public class ExperimentController {
    */
   @RequestMapping(value = "list/running")
   public ModelAndView runningList(HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/oa/leave/running");
+    ModelAndView mav = new ModelAndView("/running");
     Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findRunningProcessInstaces(page, pageParams);
@@ -116,7 +132,7 @@ public class ExperimentController {
    */
   @RequestMapping(value = "list/finished")
   public ModelAndView finishedList(HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/oa/leave/finished");
+    ModelAndView mav = new ModelAndView("finished");
     Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findFinishedProcessInstaces(page, pageParams);

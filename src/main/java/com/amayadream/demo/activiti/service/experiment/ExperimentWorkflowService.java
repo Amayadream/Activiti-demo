@@ -46,15 +46,16 @@ public class ExperimentWorkflowService {
      */
   public ProcessInstance startWorkflow(Experiment experiment, Map<String, Object> variables) {
     experimentService.insert(experiment);
+    Experiment experiment1 = experimentService.selectExperimentByUserid(experiment.getUserid());
     logger.debug("save entity: {}", experiment);
-    String businessKey = experiment.getId();
-
+    String businessKey = experiment1.getId();
     // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
     identityService.setAuthenticatedUserId(experiment.getUserid());
 
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("experiment", businessKey, variables);
     String processInstanceId = processInstance.getId();
     experiment.setProcessinstanceid(processInstanceId);
+    experimentService.update(experiment);
     logger.debug("start process of {key={}, bkey={}, pid={}, variables={}}", new Object[] { "experiment", businessKey, processInstanceId, variables });
     return processInstance;
   }

@@ -40,7 +40,7 @@
         <!-- 引入数据源 -->
         <property name="dataSource" ref="dataSource" />
         <!-- 自动扫描mapping.xml文件 -->
-        <!--<property name="mapperLocations" value="classpath:com/amayadream/demo/mapping/*.xml"/>-->
+        <property name="mapperLocations" value="classpath:com/amayadream/demo/mapping/*.xml"/>
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
@@ -66,6 +66,13 @@
         <property name="transactionManager" ref="transactionManager" />
         <property name="databaseSchemaUpdate" value="true" />
         <property name="jobExecutorActivate" value="false" />
+
+        <!-- 会部署在ACT_RE_DEPLOYMENT表,暂时不知道有什么作用 -->
+        <!--<property name="deploymentResources">-->
+            <!--<list>-->
+                <!--<value>classpath*:/deployments/*</value>-->
+            <!--</list>-->
+        <!--</property>-->
     </bean>
 
     <!-- activiti的各种服务接口 -->
