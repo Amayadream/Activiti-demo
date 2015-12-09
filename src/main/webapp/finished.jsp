@@ -18,12 +18,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<%=path%>/show">实验管理</a>
+        <a class="navbar-brand" href="<%=path%>/experiment/list/task">实验管理</a>
       </div>
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="<%=path%>/show">实验进程显示</a></li>
+          <li><a href="<%=path%>/experiment/list/task">实验进程显示</a></li>
           <li><a href="<%=path%>/experiment/list/running">在运行流程</a></li>
           <li class="active"><a href="<%=path%>/finished">已结束流程 <span class="sr-only">(current)</span></a></li>
         </ul>

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,7 @@ public class ExperimentController {
   @Autowired protected RepositoryService repositoryService;
 
   @Resource private IExperimentService experimentService;
+  @Resource private Experiment experiment;
 
   @RequestMapping(value = { "apply", "" })
   public String createForm(Model model) {
@@ -74,7 +76,8 @@ public class ExperimentController {
    * @param experiment
    */
   @RequestMapping(value = "start")
-  public String startWorkflow(Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
+  @Transactional(readOnly = true)
+  public String startWorkflow(RedirectAttributes redirectAttributes, HttpSession session) {
     try {
       User user = UserUtil.getUserFromSession(session);
       experiment.setUserid(user.getId());
@@ -148,7 +151,7 @@ public class ExperimentController {
     String userId = UserUtil.getUserFromSession(session).getId();
     taskService.claim(taskId, userId);
     redirectAttributes.addFlashAttribute("message", "任务已签收");
-    return "redirect:/oa/leave/list/task";
+    return "redirect:/experiment/list/task";
   }
 
   /**
@@ -194,6 +197,26 @@ public class ExperimentController {
     } catch (Exception e) {
       logger.error("error on complete task {}, variables={}", new Object[] { taskId, var.getVariableMap(), e });
       return "error";
+    }
+  }
+
+  /**
+   * 完成任务
+   *
+   * @param taskId
+   * @return
+   */
+  @RequestMapping(value = "complete1/{id}/{var}", method = { RequestMethod.POST, RequestMethod.GET })
+  public String complete1(@PathVariable("id") String taskId, @PathVariable("var") boolean var, RedirectAttributes redirectAttributes) {
+    try {
+      Map<String, Object> map = new HashMap<String, Object>();
+      map.put("pass",var);
+      taskService.complete(taskId, map);
+      redirectAttributes.addFlashAttribute("message","完成步骤");
+      return "redirect:/experiment/list/task";
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error","操作失败");
+      return "redirect:/experiment/list/task";
     }
   }
 

@@ -6,13 +6,12 @@
 		<id column="ID" property="id" jdbcType="VARCHAR" />
 		<result column="USERID" property="userid" jdbcType="VARCHAR" />
 		<result column="PROCESSINSTANCEID" property="processinstanceid" jdbcType="VARCHAR" />
-		<result column="TASKID" property="taskid" jdbcType="VARCHAR" />
 		<result column="STARTTIME" property="starttime" jdbcType="VARCHAR" />
 		<result column="ENDTIME" property="endtime" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List" >
-		ID, USERID, PROCESSINSTANCEID, TASKID, STARTTIME, ENDTIME
+		ID, USERID, PROCESSINSTANCEID, STARTTIME, ENDTIME
 	</sql>
 
 	<!-- 查询所有用户 -->
@@ -34,29 +33,29 @@
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM EXPERIMENT
-		WHERE ID = #{id, jdbcType=VARCHAR}
+		WHERE USERID = #{userid, jdbcType=VARCHAR}
 	</select>
 
 	<!-- 插入用户 -->
 	<insert id="insert" parameterType="com.amayadream.demo.pojo.User" >
-		INSERT INTO EXPERIMENT (ID, USERID, PROCESSINSTANCEID, TASKID ,STARTTIME, ENDTIME)
-		VALUES (sys_guid(), #{userid, jdbcType=VARCHAR}, #{processinstanceid, jdbcType=VARCHAR}, #{taskid, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
+		INSERT INTO EXPERIMENT (ID, USERID, PROCESSINSTANCEID ,STARTTIME, ENDTIME)
+		VALUES (sys_guid(), #{userid, jdbcType=VARCHAR}, #{processinstanceid, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 更新用户 -->
 	<update id="update" parameterType="com.amayadream.demo.pojo.User">
 		UPDATE EXPERIMENT
 		<set>
-			<if test="USERID != null and USERID != ''">
+			<if test="userid != null and userid != ''">
 				USERID = #{userid, jdbcType=VARCHAR},
 			</if>
-			<if test="PROCESSINSTANCEID != null and PROCESSINSTANCEID != ''">
+			<if test="processinstanceid != null and processinstanceid != ''">
 				PROCESSINSTANCEID = #{processinstanceid, jdbcType=VARCHAR},
 			</if>
-			<if test="STARTTIME != null and STARTTIME != ''">
+			<if test="starttime != null and starttime != ''">
 				STARTTIME = #{starttime, jdbcType=VARCHAR},
 			</if>
-			<if test="ENDTIME != null and ENDTIME != ''">
+			<if test="endtime != null and endtime != ''">
 				ENDTIME = #{endtime, jdbcType=VARCHAR},
 			</if>
 		</set>

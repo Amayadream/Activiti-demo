@@ -2,6 +2,7 @@ package com.amayadream.demo.activiti.service.experiment;
 
 import com.amayadream.demo.pojo.Experiment;
 import com.amayadream.demo.service.IExperimentService;
+import com.amayadream.demo.util.DateUtil;
 import com.amayadream.demo.util.Page;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -37,6 +38,7 @@ public class ExperimentWorkflowService {
   @Autowired protected RepositoryService repositoryService;
   @Autowired private IdentityService identityService;
   @Resource private IExperimentService experimentService;
+  @Resource private Experiment experiment;
 
   /**
    * 启动流程
@@ -45,6 +47,8 @@ public class ExperimentWorkflowService {
    * @return
      */
   public ProcessInstance startWorkflow(Experiment experiment, Map<String, Object> variables) {
+    DateUtil dateUtil = new DateUtil();
+    experiment.setStarttime(dateUtil.getDateTime24());
     experimentService.insert(experiment);
     Experiment experiment1 = experimentService.selectExperimentByUserid(experiment.getUserid());
     logger.debug("save entity: {}", experiment);
@@ -54,8 +58,9 @@ public class ExperimentWorkflowService {
 
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("experiment", businessKey, variables);
     String processInstanceId = processInstance.getId();
-    experiment.setProcessinstanceid(processInstanceId);
-    experimentService.update(experiment);
+    experiment1.setProcessinstanceid(processInstanceId);
+
+    experimentService.update(experiment1);
     logger.debug("start process of {key={}, bkey={}, pid={}, variables={}}", new Object[] { "experiment", businessKey, processInstanceId, variables });
     return processInstance;
   }
