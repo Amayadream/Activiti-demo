@@ -67,6 +67,9 @@
         <property name="databaseSchemaUpdate" value="true" />
         <property name="jobExecutorActivate" value="false" />
 
+        <property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="宋体"/>
+
         <!-- 会部署在ACT_RE_DEPLOYMENT表,暂时不知道有什么作用 -->
         <!--<property name="deploymentResources">-->
             <!--<list>-->

@@ -64,7 +64,7 @@ public class ExperimentController {
   public String deploy(RedirectAttributes redirectAttributes){
     repositoryService.createDeployment().name("experiment")
                                         .addClasspathResource("diagrams/experiment/experiment.bpmn")
-                                        .addClasspathResource("diagrams/experiment/experiment.png")
+//                                        .addClasspathResource("diagrams/experiment/experiment.png")
                                         .deploy();
     redirectAttributes.addFlashAttribute("message","部署成功");
     return "redirect:/experiment/list/task";

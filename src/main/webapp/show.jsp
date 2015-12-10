@@ -8,8 +8,14 @@
   <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
   <link href="<%=path%>/plugins/scojs/css/sco.message.css" type="text/css" rel="stylesheet">
   <script src="<%=path%>/plugins/jquery/jquery-2.1.4.min.js"></script>
+  <script src="<%=path%>/static/activiti/common.js"></script>
   <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
+  <script type="text/javascript">
+  </script>
+  <script type="text/javascript">
+    var ctx = '<%=request.getContextPath() %>';
+  </script>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -61,6 +67,7 @@
       <th>当前节点</th>
       <th>任务创建时间</th>
       <th>流程状态</th>
+      <th>查看</th>
       <th>操作</th>
 
       <c:forEach items="${page.result }" var="experiment" varStatus="status">
@@ -78,14 +85,15 @@
           <td>${task.createTime }</td>
           <td>${pi.suspended ? "已挂起" : "正常" }；<b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
           <td>
+            <button class="btn btn-success btn-sm show" id="${pi.id}" onclick="showPage();">查看流程图</button>
+          </td>
+          <td>
             <c:if test="${empty task.assignee }">
               <a href="<%=path%>/experiment/task/claim/${task.id}">签收</a>
             </c:if>
             <c:if test="${not empty task.assignee }">
               <a href="<%=path%>/experiment/complete1/${task.id}/false">回退</a>|
               <a href="<%=path%>/experiment/complete1/${task.id}/true">继续</a>
-              <%--&lt;%&ndash; 此处用tkey记录当前节点的名称 &ndash;%&gt;--%>
-              <%--<a class="handle" tkey='${task.taskDefinitionKey }' tname='${task.name }' href="#">办理</a>--%>
             </c:if>
           </td>
         </tr>
@@ -95,6 +103,26 @@
   </div>
 </div>
 
+<!-- 删除模态框 -->
+<div class="modal fade" id="show-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="model2">
+          <span class="glyphicon glyphicon-search"></span> 流程图
+        </h4>
+      </div>
+      <div class="modal-body">
+        <img src="" id="img">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
   <c:if test="${not empty error}">
     $.scojs_message("${error}", $.scojs_message.TYPE_ERROR);
@@ -102,6 +130,11 @@
   <c:if test="${not empty message}">
   $.scojs_message("${message}", $.scojs_message.TYPE_OK);
   </c:if>
+  function showPage(){
+    id = $(".show").attr("id");
+    $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
+    $("#show-model").modal();
+  }
 </script>
 </body>
 </html>

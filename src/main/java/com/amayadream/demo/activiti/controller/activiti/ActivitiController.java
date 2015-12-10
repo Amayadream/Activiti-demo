@@ -222,11 +222,16 @@ public class ActivitiController {
 //    Context.setProcessEngineConfiguration(defaultProcessEngine.getProcessEngineConfiguration());
 
     // 使用spring注入引擎请使用下面的这行代码
+
     processEngineConfiguration = processEngine.getProcessEngineConfiguration();
     Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl) processEngineConfiguration);
 
     ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
-    InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
+//    InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
+    InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel,"png",activeActivityIds,activeActivityIds,
+                    processEngine.getProcessEngineConfiguration().getActivityFontName(),
+                    processEngine.getProcessEngineConfiguration().getLabelFontName(),
+                    processEngine.getProcessEngineConfiguration().getClassLoader(),1.0);
 
     // 输出资源内容到相应对象
     byte[] b = new byte[1024];
