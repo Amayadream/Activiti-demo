@@ -25,7 +25,7 @@
         <ul class="nav navbar-nav">
           <li><a href="<%=path%>/experiment/list/task">实验进程显示</a></li>
           <li><a href="<%=path%>/experiment/list/running">在运行流程</a></li>
-          <li class="active"><a href="<%=path%>/finished">已结束流程 <span class="sr-only">(current)</span></a></li>
+          <li class="active"><a href="<%=path%>/experiment/list/finished">已结束流程 <span class="sr-only">(current)</span></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
@@ -45,21 +45,26 @@
     <table class="table table-bordered">
       <th>#</th>
       <th>执行者</th>
-      <th>执行时间</th>
+      <th>开始时间</th>
+      <th>结束时间</th>
       <th>流程启动时间</th>
       <th>流程结束时间</th>
       <th>流程结束原因</th>
       <th>流程版本</th>
 
-      <tr>
-        <td>1</td>
-        <td>教师一号</td>
-        <td>2015.12.09 10:27:30</td>
-        <td>2015.12.09 10:27:30</td>
-        <td>2015.12.09 10:27:30</td>
-        <td></td>
-        <td>v1</td>
-      </tr>
+      <c:forEach items="${page.result }" var="experiment" varStatus="status">
+        <c:set var="hpi" value="${experiment.historicProcessInstance }" />
+        <tr id="${experiment.id }" tid="${task.id }">
+          <td>${status.index + 1}</td>
+          <td>${experiment.userid }</td>
+          <td>${experiment.starttime }</td>
+          <td>${experiment.endtime }</td>
+          <td>${hpi.startTime }</td>
+          <td>${hpi.endTime }</td>
+          <td>${hpi.deleteReason }</td>
+          <td><b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
+        </tr>
+      </c:forEach>
     </table>
   </div>
 </body>

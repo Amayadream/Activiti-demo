@@ -67,7 +67,7 @@ public class ExperimentController {
                                         .addClasspathResource("diagrams/experiment/experiment.png")
                                         .deploy();
     redirectAttributes.addFlashAttribute("message","部署成功");
-    return "redirect:/show";
+    return "redirect:/experiment/list/task";
   }
 
   /**
@@ -77,7 +77,7 @@ public class ExperimentController {
    */
   @RequestMapping(value = "start")
   @Transactional(readOnly = true)
-  public String startWorkflow(RedirectAttributes redirectAttributes, HttpSession session) {
+  public String startWorkflow(Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
     try {
       User user = UserUtil.getUserFromSession(session);
       experiment.setUserid(user.getId());
@@ -96,7 +96,7 @@ public class ExperimentController {
       logger.error("启动实验流程失败：", e);
       redirectAttributes.addFlashAttribute("error", "系统内部错误！");
     }
-    return "redirect:/show";
+    return "redirect:/experiment/list/task";
   }
 
   /**
@@ -129,13 +129,13 @@ public class ExperimentController {
   }
 
   /**
-   * 读取运行中的流程实例
+   * 读取已结束的流程实例
    * 
    * @return
    */
   @RequestMapping(value = "list/finished")
   public ModelAndView finishedList(HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("finished");
+    ModelAndView mav = new ModelAndView("/finished");
     Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findFinishedProcessInstaces(page, pageParams);
@@ -202,7 +202,6 @@ public class ExperimentController {
 
   /**
    * 完成任务
-   *
    * @param taskId
    * @return
    */

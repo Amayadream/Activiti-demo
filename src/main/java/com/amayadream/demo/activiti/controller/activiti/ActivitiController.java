@@ -10,10 +10,9 @@ import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.identity.User;
+import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -77,9 +76,13 @@ public class ActivitiController {
 
   @Autowired protected WorkflowTraceService traceService;
 
+  @Autowired ManagementService managementService;
+
   protected static Map<String, ProcessDefinition> PROCESS_DEFINITION_CACHE = new HashMap<String, ProcessDefinition>();
 
-//  @Autowired protected ProcessEngineFactoryBean processEngine;
+  @Autowired protected ProcessEngineFactoryBean processEngine;
+
+  @Autowired ProcessEngineConfiguration processEngineConfiguration;
 
   /**
    * 流程定义列表
@@ -205,31 +208,33 @@ public class ActivitiController {
     return activityInfos;
   }
 
-//  /**
-//   * 读取带跟踪的图片
-//   */
-//  @RequestMapping(value = "/process/trace/auto/{executionId}")
-//  public void readResource(@PathVariable("executionId") String executionId, HttpServletResponse response)
-//          throws Exception {
-//    ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
-//    BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
-//    List<String> activeActivityIds = runtimeService.getActiveActivityIds(executionId);
-//    // 不使用spring请使用下面的两行代码
-////    ProcessEngineImpl defaultProcessEngine = (ProcessEngineImpl) ProcessEngines.getDefaultProcessEngine();
-////    Context.setProcessEngineConfiguration(defaultProcessEngine.getProcessEngineConfiguration());
-//
-//    // 使用spring注入引擎请使用下面的这行代码
-//    Context.setProcessEngineConfiguration(processEngine.getProcessEngineConfiguration());
-//
-//    InputStream imageStream = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
-//
-//    // 输出资源内容到相应对象
-//    byte[] b = new byte[1024];
-//    int len;
-//    while ((len = imageStream.read(b, 0, 1024)) != -1) {
-//      response.getOutputStream().write(b, 0, len);
-//    }
-//  }
+  /**
+   * 读取带跟踪的图片
+   */
+  @RequestMapping(value = "/process/trace/auto/{executionId}")
+  public void readResource(@PathVariable("executionId") String executionId, HttpServletResponse response)
+          throws Exception {
+    ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
+    BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
+    List<String> activeActivityIds = runtimeService.getActiveActivityIds(executionId);
+    // 不使用spring请使用下面的两行代码
+//    ProcessEngineImpl defaultProcessEngine = (ProcessEngineImpl) ProcessEngines.getDefaultProcessEngine();
+//    Context.setProcessEngineConfiguration(defaultProcessEngine.getProcessEngineConfiguration());
+
+    // 使用spring注入引擎请使用下面的这行代码
+    processEngineConfiguration = processEngine.getProcessEngineConfiguration();
+    Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl) processEngineConfiguration);
+
+    ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
+    InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
+
+    // 输出资源内容到相应对象
+    byte[] b = new byte[1024];
+    int len;
+    while ((len = imageStream.read(b, 0, 1024)) != -1) {
+      response.getOutputStream().write(b, 0, len);
+    }
+  }
 
   @RequestMapping(value = "/deploy")
   public String deploy(@Value("#{APP_PROPERTIES['export.diagram.path']}") String exportDir, @RequestParam(value = "file", required = false) MultipartFile file) {
@@ -261,37 +266,37 @@ public class ActivitiController {
     return "redirect:/workflow/process-list";
   }
 
-//  @RequestMapping(value = "/process/convert-to-model/{processDefinitionId}")
-//  public String convertToModel(@PathVariable("processDefinitionId") String processDefinitionId)
-//          throws UnsupportedEncodingException, XMLStreamException {
-//    ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-//            .processDefinitionId(processDefinitionId).singleResult();
-//    InputStream bpmnStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),
-//            processDefinition.getResourceName());
-//    XMLInputFactory xif = XMLInputFactory.newInstance();
-//    InputStreamReader in = new InputStreamReader(bpmnStream, "UTF-8");
-//    XMLStreamReader xtr = xif.createXMLStreamReader(in);
-//    BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
-//
-//    BpmnJsonConverter converter = new BpmnJsonConverter();
-//    ObjectNode modelNode = converter.convertToJson(bpmnModel);
-//    Model modelData = repositoryService.newModel();
-//    modelData.setKey(processDefinition.getKey());
-//    modelData.setName(processDefinition.getResourceName());
-//    modelData.setCategory(processDefinition.getDeploymentId());
-//
-//    ObjectNode modelObjectNode = new ObjectMapper().createObjectNode();
-//    modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, processDefinition.getName());
-//    modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
-//    modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, processDefinition.getDescription());
-//    modelData.setMetaInfo(modelObjectNode.toString());
-//
-//    repositoryService.saveModel(modelData);
-//
-//    repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
-//
-//    return "redirect:/workflow/model/list";
-//  }
+  @RequestMapping(value = "/process/convert-to-model/{processDefinitionId}")
+  public String convertToModel(@PathVariable("processDefinitionId") String processDefinitionId)
+          throws UnsupportedEncodingException, XMLStreamException {
+    ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+            .processDefinitionId(processDefinitionId).singleResult();
+    InputStream bpmnStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),
+            processDefinition.getResourceName());
+    XMLInputFactory xif = XMLInputFactory.newInstance();
+    InputStreamReader in = new InputStreamReader(bpmnStream, "UTF-8");
+    XMLStreamReader xtr = xif.createXMLStreamReader(in);
+    BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
+
+    BpmnJsonConverter converter = new BpmnJsonConverter();
+    com.fasterxml.jackson.databind.node.ObjectNode modelNode = converter.convertToJson(bpmnModel);
+    Model modelData = repositoryService.newModel();
+    modelData.setKey(processDefinition.getKey());
+    modelData.setName(processDefinition.getResourceName());
+    modelData.setCategory(processDefinition.getDeploymentId());
+
+    ObjectNode modelObjectNode = new ObjectMapper().createObjectNode();
+    modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, processDefinition.getName());
+    modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
+    modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, processDefinition.getDescription());
+    modelData.setMetaInfo(modelObjectNode.toString());
+
+    repositoryService.saveModel(modelData);
+
+    repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
+
+    return "redirect:/workflow/model/list";
+  }
 
   /**
    * 待办任务--Portlet

@@ -38,8 +38,11 @@
 
 	<!-- 插入用户 -->
 	<insert id="insert" parameterType="com.amayadream.demo.pojo.User" >
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
 		INSERT INTO EXPERIMENT (ID, USERID, PROCESSINSTANCEID ,STARTTIME, ENDTIME)
-		VALUES (sys_guid(), #{userid, jdbcType=VARCHAR}, #{processinstanceid, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
+		VALUES (#{id,jdbcType=VARCHAR}, #{userid, jdbcType=VARCHAR}, #{processinstanceid, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 更新用户 -->

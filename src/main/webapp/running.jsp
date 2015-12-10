@@ -25,7 +25,7 @@
         <ul class="nav navbar-nav">
           <li><a href="<%=path%>/experiment/list/task">实验进程显示</a></li>
           <li class="active"><a href="<%=path%>/experiment/list/running">在运行流程 <span class="sr-only">(current)</span></a></li>
-          <li><a href="<%=path%>/finished">已结束流程</a></li>
+          <li><a href="<%=path%>/experiment/list/finished">已结束流程</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">

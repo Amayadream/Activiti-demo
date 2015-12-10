@@ -9,28 +9,48 @@
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow3" sourceRef="supplyChange" targetRef="exclusivegateway1"></sequenceFlow>
     <userTask id="planChange" name="作战方案调整" activiti:candidateGroups="student"></userTask>
-    <sequenceFlow id="flow5" sourceRef="exclusivegateway1" targetRef="planChange" skipExpression="${pass}"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="exclusivegateway1" targetRef="planChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+    </sequenceFlow>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow6" sourceRef="planChange" targetRef="exclusivegateway2"></sequenceFlow>
     <userTask id="startSim" name="离线仿真" activiti:candidateGroups="student"></userTask>
-    <sequenceFlow id="flow8" sourceRef="exclusivegateway2" targetRef="startSim" skipExpression="${pass}"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway2" targetRef="startSim">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+    </sequenceFlow>
     <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
     <userTask id="playbackSim" name="仿真回放" activiti:candidateGroups="student"></userTask>
-    <sequenceFlow id="flow11" sourceRef="exclusivegateway3" targetRef="playbackSim" skipExpression="${pass}"></sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="exclusivegateway3" targetRef="playbackSim">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+    </sequenceFlow>
     <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow12" sourceRef="playbackSim" targetRef="exclusivegateway4"></sequenceFlow>
-    <userTask id="analysis" name="分析评估" activiti:candidateGroups="${applyUserId}"></userTask>
+    <userTask id="analysis" name="分析评估" activiti:candidateGroups="student"></userTask>
     <sequenceFlow id="flow2" sourceRef="experimentPrepare" targetRef="supplyChange"></sequenceFlow>
-    <sequenceFlow id="flow4" name="退回实验准备" sourceRef="exclusivegateway1" targetRef="experimentPrepare" skipExpression="${!pass}"></sequenceFlow>
-    <sequenceFlow id="flow7" name="退回后勤供应调整" sourceRef="exclusivegateway2" targetRef="supplyChange" skipExpression="${!pass}"></sequenceFlow>
-    <sequenceFlow id="flow10" name="退回作战方案调整" sourceRef="exclusivegateway3" targetRef="planChange" skipExpression="${!pass}"></sequenceFlow>
-    <sequenceFlow id="flow13" name="退回离线仿真" sourceRef="exclusivegateway4" targetRef="startSim" skipExpression="${!pass}"></sequenceFlow>
+    <sequenceFlow id="flow4" name="退回实验准备" sourceRef="exclusivegateway1" targetRef="experimentPrepare">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow7" name="退回后勤供应调整" sourceRef="exclusivegateway2" targetRef="supplyChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow10" name="退回作战方案调整" sourceRef="exclusivegateway3" targetRef="planChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow13" name="退回离线仿真" sourceRef="exclusivegateway4" targetRef="startSim">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+    </sequenceFlow>
     <exclusiveGateway id="exclusivegateway5" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow15" sourceRef="analysis" targetRef="exclusivegateway5"></sequenceFlow>
     <endEvent id="end" name="实验结束"></endEvent>
-    <sequenceFlow id="flow16" name="退回仿真回放" sourceRef="exclusivegateway5" targetRef="playbackSim" skipExpression="${!pass}"></sequenceFlow>
-    <sequenceFlow id="flow17" sourceRef="exclusivegateway5" targetRef="end" skipExpression="${pass}"></sequenceFlow>
-    <sequenceFlow id="flow14" sourceRef="exclusivegateway4" targetRef="analysis" skipExpression="${pass}"></sequenceFlow>
+    <sequenceFlow id="flow16" name="退回仿真回放" sourceRef="exclusivegateway5" targetRef="playbackSim">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="exclusivegateway5" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="exclusivegateway4" targetRef="analysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="flow9" sourceRef="startSim" targetRef="exclusivegateway3"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_experiment">
@@ -112,7 +132,7 @@
         <omgdi:waypoint x="263.0" y="17.0"></omgdi:waypoint>
         <omgdi:waypoint x="263.0" y="81.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="16.0" width="96.0" x="381.0" y="21.0"></omgdc:Bounds>
+          <omgdc:Bounds height="48.0" width="100.0" x="381.0" y="21.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
@@ -131,7 +151,7 @@
         <omgdi:waypoint x="865.0" y="108.0"></omgdi:waypoint>
         <omgdi:waypoint x="786.0" y="108.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="48.0" width="100.0" x="686.0" y="489.0"></omgdc:Bounds>
+          <omgdc:Bounds height="48.0" width="100.0" x="760.0" y="489.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
@@ -140,7 +160,7 @@
         <omgdi:waypoint x="733.0" y="359.0"></omgdi:waypoint>
         <omgdi:waypoint x="733.0" y="419.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="16.0" width="96.0" x="510.0" y="361.0"></omgdc:Bounds>
+          <omgdc:Bounds height="48.0" width="100.0" x="510.0" y="361.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
@@ -153,7 +173,7 @@
         <omgdi:waypoint x="498.0" y="539.0"></omgdi:waypoint>
         <omgdi:waypoint x="498.0" y="474.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="16.0" width="96.0" x="262.0" y="489.0"></omgdc:Bounds>
+          <omgdc:Bounds height="48.0" width="100.0" x="262.0" y="489.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">

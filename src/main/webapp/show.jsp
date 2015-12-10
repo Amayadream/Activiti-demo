@@ -28,7 +28,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="<%=path%>/experiment/list/task">实验进程显示 <span class="sr-only">(current)</span></a></li>
         <li><a href="<%=path%>/experiment/list/running">在运行流程</a></li>
-        <li><a href="<%=path%>/finished">已结束流程</a></li>
+        <li><a href="<%=path%>/experiment/list/finished">已结束流程</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -47,8 +47,6 @@
 <div>
   <div class="well">
     <h2>操作</h2>
-    <button class="btn btn-danger" onclick="">返回上一步</button>
-    <button class="btn btn-success" onclick="">进行下一步</button>
     <a href="<%=path%>/experiment/deploy">部署实验</a>
     <a href="<%=path%>/experiment/start">开始实验</a>
     <h2>总体过程</h2>

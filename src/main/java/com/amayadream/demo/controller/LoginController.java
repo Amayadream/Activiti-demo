@@ -51,7 +51,7 @@ public class LoginController {
                 groupnames[i] = groupList.get(i).getName();
             }
             session.setAttribute("groupnames", ArrayUtils.toString(groupnames));
-            return "redirect:/show";
+            return "redirect:/experiment/list/task";
         } else {
             return "redirect:/login?error=true";
         }
