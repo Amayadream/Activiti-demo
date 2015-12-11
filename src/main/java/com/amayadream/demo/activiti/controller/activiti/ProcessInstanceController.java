@@ -23,9 +23,15 @@ public class ProcessInstanceController {
   @Autowired
   private RuntimeService runtimeService;
 
+  /**
+   * 查询所有运行中的流程
+   * @param model
+   * @param request
+   * @return
+     */
   @RequestMapping(value = "running")
   public ModelAndView running(Model model, HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/workflow/running-manage");
+    ModelAndView mav = new ModelAndView("running-manage");
     Page<ProcessInstance> page = new Page<ProcessInstance>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     

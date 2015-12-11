@@ -23,9 +23,22 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="<%=path%>/experiment/list/task">实验进程显示</a></li>
-          <li class="active"><a href="<%=path%>/experiment/list/running">在运行流程 <span class="sr-only">(current)</span></a></li>
-          <li><a href="<%=path%>/experiment/list/finished">已结束流程</a></li>
+          <li class="dropdown active">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">实验管理 <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="<%=path%>/experiment/list/task">实验进程显示 </a></li>
+              <li class="active"><a href="<%=path%>/experiment/list/running">在运行流程</a></li>
+              <li><a href="<%=path%>/experiment/list/finished">已结束流程</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="<%=path%>/experiment/list/task">流程定义与部署管理 </a></li>
+              <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
+              <li><a href="<%=path%>/experiment/list/finished">模型工作区</a></li>
+            </ul>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
