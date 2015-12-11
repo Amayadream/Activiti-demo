@@ -34,9 +34,9 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="<%=path%>/experiment/list/task">流程定义与部署管理 </a></li>
+              <li><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
               <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
-              <li><a href="<%=path%>/experiment/list/finished">模型工作区</a></li>
+              <li><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
             </ul>
           </li>
         </ul>
@@ -56,28 +56,33 @@
 
   <div class="well">
     <table class="table table-bordered">
-      <th>#</th>
-      <th>执行者</th>
-      <th>开始时间</th>
-      <th>结束时间</th>
-      <th>流程启动时间</th>
-      <th>流程结束时间</th>
-      <th>流程结束原因</th>
-      <th>流程版本</th>
-
-      <c:forEach items="${page.result }" var="experiment" varStatus="status">
-        <c:set var="hpi" value="${experiment.historicProcessInstance }" />
-        <tr id="${experiment.id }" tid="${task.id }">
-          <td>${status.index + 1}</td>
-          <td>${experiment.userid }</td>
-          <td>${experiment.starttime }</td>
-          <td>${experiment.endtime }</td>
-          <td>${hpi.startTime }</td>
-          <td>${hpi.endTime }</td>
-          <td>${hpi.deleteReason }</td>
-          <td><b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>执行者</th>
+          <th>开始时间</th>
+          <th>结束时间</th>
+          <th>流程启动时间</th>
+          <th>流程结束时间</th>
+          <th>流程结束原因</th>
+          <th>流程版本</th>
         </tr>
-      </c:forEach>
+      </thead>
+      <tbody>
+        <c:forEach items="${page.result }" var="experiment" varStatus="status">
+          <c:set var="hpi" value="${experiment.historicProcessInstance }" />
+          <tr id="${experiment.id }" tid="${task.id }">
+            <td>${status.index + 1}</td>
+            <td>${experiment.userid }</td>
+            <td>${experiment.starttime }</td>
+            <td>${experiment.endtime }</td>
+            <td>${hpi.startTime }</td>
+            <td>${hpi.endTime }</td>
+            <td>${hpi.deleteReason }</td>
+            <td><b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
+          </tr>
+        </c:forEach>
+      </tbody>
     </table>
   </div>
 </body>

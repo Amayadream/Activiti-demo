@@ -14,7 +14,12 @@
   <script type="text/javascript">
   </script>
   <script type="text/javascript">
-    var ctx = '<%=request.getContextPath() %>';
+      $(function(){
+        $('#deploy').click(function() {
+          $('#deployForm').slideToggle('fast');
+          return false;
+        });
+      });
   </script>
 </head>
 <body>
@@ -43,9 +48,9 @@
         <li class="dropdown active">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li class="active"><a href="<%=path%>/experiment/list/task">流程定义与部署管理 </a></li>
+            <li class="active"><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
             <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
-            <li><a href="<%=path%>/experiment/list/finished">模型工作区</a></li>
+            <li><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
           </ul>
         </li>
       </ul>
@@ -65,53 +70,60 @@
 
 <div>
   <div class="well">
-    <h2>操作</h2>
-    <a href="<%=path%>/experiment/deploy">部署实验</a>
-    <a href="<%=path%>/experiment/start">开始实验</a>
-    <h2>总体过程</h2>
-    <h4>实验准备---后勤供应调整---作战方案调整---离线仿真---仿真回放---分析评估</h4>
+    <h2>工作区/<small>流程定义及部署管理</small></h2>
   </div>
   <div class="well">
+    <button class="btn btn-primary" id="deploy" style="float:right">部署流程</button>
+    <div id="deployForm" style="display: none">
+      <h3>部署新流程/<small>支持的格式有:zip、bar、bpmn、bpmn20.xml</small></h3>
+      <form action="<%=path%>/workflow/deploy" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <input type="submit" value="提交" />
+      </form>
+    </div>
     <table class="table table-bordered">
-      <th>#</th>
-      <th>执行者</th>
-      <th>执行时间</th>
-      <th>结束时间</th>
-      <th>当前节点</th>
-      <th>任务创建时间</th>
-      <th>流程状态</th>
-      <th>查看</th>
-      <th>操作</th>
-
-      <c:forEach items="${page.result }" var="experiment" varStatus="status">
-        <c:set var="task" value="${experiment.task }" />
-        <c:set var="pi" value="${experiment.processInstance }" />
-        <tr id="${experiment.id }" tid="${task.id }">
-          <td>${status.index + 1}</td>
-          <td>${experiment.userid }</td>
-          <td>${experiment.starttime }</td>
-          <td>${experiment.endtime }</td>
-          <td>
-            <a class="trace" href='#' pid="${pi.id }" title="点击查看流程图">${task.name }</a>
-          </td>
-            <%--<td><a target="_blank" href='${ctx }/workflow/resource/process-instance?pid=${pi.id }&type=xml'>${task.name }</a></td> --%>
-          <td>${task.createTime }</td>
-          <td>${pi.suspended ? "已挂起" : "正常" }；<b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
-          <td>
-            <button class="btn btn-success btn-sm show" id="${pi.id}" onclick="showPage('${pi.id}');">查看流程图</button>
-          </td>
-          <td>
-            <c:if test="${empty task.assignee }">
-              <a href="<%=path%>/experiment/task/claim/${task.id}">签收</a>
+      <thead>
+      <tr>
+        <th>ProcessDefinitionId</th>
+        <th>DeploymentId</th>
+        <th>名称</th>
+        <th>KEY</th>
+        <th>版本号</th>
+        <th>XML</th>
+        <th>图片</th>
+        <th>部署时间</th>
+        <th>是否挂起</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <c:forEach items="${page.result }" var="object">
+        <c:set var="process" value="${object[0] }" />
+        <c:set var="deployment" value="${object[1] }" />
+        <tr>
+          <td>${process.id }</td>
+          <td>${process.deploymentId }</td>
+          <td>${process.name }</td>
+          <td>${process.key }</td>
+          <td>${process.version }</td>
+          <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
+          <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
+          <td>${deployment.deploymentTime }</td>
+          <td>${process.suspended} |
+            <c:if test="${process.suspended }">
+              <a href="processdefinition/update/active/${process.id}">激活</a>
             </c:if>
-            <c:if test="${not empty task.assignee }">
-              <a href="<%=path%>/experiment/complete1/${task.id}/false">回退</a>|
-              <a href="<%=path%>/experiment/complete1/${task.id}/true">继续</a>
+            <c:if test="${!process.suspended }">
+              <a href="processdefinition/update/suspend/${process.id}">挂起</a>
             </c:if>
+          </td>
+          <td>
+            <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}'>删除</a>
+            <a href='<%=path%>/workflow/process/convert-to-model/${process.id}'>转换为Model</a>
           </td>
         </tr>
       </c:forEach>
-
+      </tbody>
     </table>
   </div>
 </div>
@@ -143,10 +155,6 @@
   <c:if test="${not empty message}">
   $.scojs_message("${message}", $.scojs_message.TYPE_OK);
   </c:if>
-  function showPage(id){
-    $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
-    $("#show-model").modal();
-  }
 </script>
 </body>
 </html>

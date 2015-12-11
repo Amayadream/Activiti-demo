@@ -51,9 +51,9 @@
         <li class="dropdown active">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="<%=path%>/experiment/list/task">流程定义与部署管理 </a></li>
+            <li><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
             <li class="active"><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
-            <li><a href="<%=path%>/experiment/list/finished">模型工作区</a></li>
+            <li><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
           </ul>
         </li>
       </ul>
@@ -93,7 +93,7 @@
           <td>${p.id }</td>
           <td>${p.processInstanceId }</td>
           <td>${p.processDefinitionId }</td>
-          <td><a class="trace" href='#' pid="${p.id }" title="点击查看流程图"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></a></td>
+          <td><button class="btn btn-success btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
           <td>${p.suspended }</td>
           <td>
             <c:if test="${p.suspended }">
