@@ -101,7 +101,7 @@ public class ModelController {
       bpmnBytes = new BpmnXMLConverter().convertToXML(model);
 
       String processName = modelData.getName() + ".bpmn20.xml";
-      Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes)).deploy();
+      Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes,"UTF-8")).deploy();  //这里务必加上utf-8,否则各种乱码,切记切记
       redirectAttributes.addFlashAttribute("message", "部署成功，部署ID=" + deployment.getId());
     } catch (Exception e) {
       logger.error("根据模型部署流程失败：modelId={}", modelId, e);
@@ -110,27 +110,53 @@ public class ModelController {
   }
 
   /**
-   * 导出model的xml文件
+   * 导出model对象为指定类型
+   * @param modelId 模型ID
+   * @param type 导出文件类型(bpmn\json)
    */
-  @RequestMapping(value = "export/{modelId}")
-  public void export(@PathVariable("modelId") String modelId, HttpServletResponse response) {
+  @RequestMapping(value = "export/{modelId}/{type}")
+  public void export(@PathVariable("modelId") String modelId,
+                     @PathVariable("type") String type,
+                     HttpServletResponse response) {
     try {
       Model modelData = repositoryService.getModel(modelId);
       BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-      JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
-      BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
-      BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
-      byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
+      byte[] modelEditorSource = repositoryService.getModelEditorSource(modelData.getId());
 
-      ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
+      JsonNode editorNode = new ObjectMapper().readTree(modelEditorSource);
+      BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
+
+      // 处理异常
+      if (bpmnModel.getMainProcess() == null) {
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        response.getOutputStream().println("no main process, can't export for type: " + type);
+        response.flushBuffer();
+        return;
+      }
+      String filename = "";
+      byte[] exportBytes = null;
+
+      String mainProcessId = bpmnModel.getMainProcess().getId();
+
+      if(type.equals("bpmn")){
+        BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+        exportBytes = xmlConverter.convertToXML(bpmnModel);
+        filename = mainProcessId + ".bpmn20.xml";
+      }else{
+        exportBytes = modelEditorSource;
+        filename = mainProcessId + ".json";
+      }
+
+      ByteArrayInputStream in = new ByteArrayInputStream(exportBytes);
       IOUtils.copy(in, response.getOutputStream());
-      String filename = bpmnModel.getMainProcess().getId() + ".bpmn20.xml";
+
       response.setHeader("Content-Disposition", "attachment; filename=" + filename);
       response.flushBuffer();
     } catch (Exception e) {
-      logger.error("导出model的xml文件失败：modelId={}", modelId, e);
+      logger.error("导出model的xml文件失败：modelId={}, type={}", modelId, type, e);
     }
   }
+
 
   @RequestMapping(value = "delete/{modelId}")
   public String delete(@PathVariable("modelId") String modelId) {
