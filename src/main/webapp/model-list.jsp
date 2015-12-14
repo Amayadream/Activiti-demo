@@ -92,7 +92,7 @@
           <td>${model.lastUpdateTime}</td>
           <td>${model.metaInfo}</td>
           <td>
-            <a href="<%=path%>/service/editor?id=${model.id}" target="_blank">编辑</a>
+            <a href="<%=path%>/modeler.html?modelId=${model.id}" target="_blank">编辑</a>
             <a href="<%=path%>/workflow/model/deploy/${model.id}">部署</a>
             <a href="<%=path%>/workflow/model/export/${model.id}" target="_blank">导出</a>
             <a href="<%=path%>/workflow/model/delete/${model.id}">删除</a>
