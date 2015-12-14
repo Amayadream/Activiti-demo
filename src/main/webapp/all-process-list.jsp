@@ -63,7 +63,7 @@
 
 <div>
   <div class="well">
-    <h1>工作区/<small>模型工作区</small></h1>
+    <h1>所有流程/<small>可启动流程列表</small></h1>
   </div>
   <div class="well">
     <table class="table table-bordered">
@@ -89,7 +89,7 @@
           <td>${process.version }</td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
-          <td><a href="<%=path%>/workflow/processinstance/start">启动</a></td>
+          <td><a href="<%=path%>/workflow/processinstance/start/${process.id}">启动</a></td>
         </tr>
       </c:forEach>
       </tbody>

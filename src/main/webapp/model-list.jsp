@@ -12,6 +12,9 @@
   <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
   <script type="text/javascript">
+    function add(){
+      $("#add-model").modal();
+    }
   </script>
 </head>
 <body>
@@ -66,7 +69,7 @@
     <h1>工作区/<small>模型工作区</small></h1>
   </div>
   <div class="well">
-    <button class="btn btn-success" style="float:right;">创建模型</button>
+    <button class="btn btn-success" style="float:right;" onclick="javascript:add()">创建模型</button>
   </div>
   <div class="well">
     <table class="table table-bordered">
@@ -106,22 +109,36 @@
   </div>
 </div>
 
-<!-- 删除模态框 -->
-<div class="modal fade" id="show-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
+<!-- 添加模态框 -->
+<div class="modal fade" id="add-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title" id="model2">
-          <span class="glyphicon glyphicon-search"></span> 流程图
+          <span class="glyphicon glyphicon-edit"></span> 添加模型
         </h4>
       </div>
-      <div class="modal-body">
-        <img src="" id="img">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
-      </div>
+      <form action="<%=path%>/workflow/model/create" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="name">模型名称</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="这里输入模型的名称...">
+          </div>
+          <div class="form-group">
+            <label for="key">关键字</label>
+            <input type="text" class="form-control" id="key" name="key" placeholder="这里输入模型的关键字">
+          </div>
+          <div class="form-group">
+            <label for="description">描述</label>
+            <textarea id="description" class="form-control" rows="2" id="description" name="description" placeholder="这里输入模型的描述..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">提交</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
+        </div>
+      </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

@@ -66,9 +66,6 @@
 
 <div>
   <div class="well">
-    <h2>操作</h2>
-    <a href="<%=path%>/experiment/deploy">部署实验</a>
-    <a href="<%=path%>/experiment/start">开始实验</a>
     <h2>总体过程</h2>
     <h4>实验准备---后勤供应调整---作战方案调整---离线仿真---仿真回放---分析评估</h4>
   </div>

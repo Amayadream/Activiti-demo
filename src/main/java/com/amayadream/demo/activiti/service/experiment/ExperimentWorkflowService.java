@@ -53,7 +53,8 @@ public class ExperimentWorkflowService {
     String businessKey = experiment.getId();
     // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
     identityService.setAuthenticatedUserId(experiment.getUserid());
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("experiment", businessKey, variables);
+//    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("experiment", businessKey, variables);
+    ProcessInstance processInstance = runtimeService.startProcessInstanceById("experiment:3:5026", businessKey, variables);
     String processInstanceId = processInstance.getId();
     experiment.setProcessinstanceid(processInstanceId);
     experimentService.update(experiment);
@@ -68,18 +69,17 @@ public class ExperimentWorkflowService {
    * @param variables
      * @return
      */
-  public ProcessInstance start(String key, Experiment experiment, Map<String, Object> variables){
+  public ProcessInstance start(String id, Experiment experiment, Map<String, Object> variables){
     DateUtil dateUtil = new DateUtil();
     experiment.setStarttime(dateUtil.getDateTime24());
     experimentService.insert(experiment);
     String businessKey = experiment.getId();
     // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
     identityService.setAuthenticatedUserId(experiment.getUserid());
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, businessKey, variables);
+    ProcessInstance processInstance = runtimeService.startProcessInstanceById(id, businessKey, variables);
     String processInstanceId = processInstance.getId();
     experiment.setProcessinstanceid(processInstanceId);
     experimentService.update(experiment);
-    logger.debug("start process of {key={}, bkey={}, pid={}, variables={}}", new Object[] { "experiment", businessKey, processInstanceId, variables });
     return processInstance;
   }
 

@@ -59,22 +59,21 @@ public class ProcessInstanceController {
         return mav;
     }
 
-    @RequestMapping(value = "start")
-    public String start(Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
+    @RequestMapping(value = "start/{id}")
+    public String start(@PathVariable("id") String id, Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
         try {
             org.activiti.engine.identity.User user = UserUtil.getUserFromSession(session);
             experiment.setUserid(user.getId());
             Map<String, Object> variables = new HashMap<String, Object>();
-            ProcessInstance processInstance = workflowService.startWorkflow(experiment, variables);
+            ProcessInstance processInstance = workflowService.start(id, experiment, variables);
             redirectAttributes.addFlashAttribute("message", "流程已启动，流程ID：" + processInstance.getId());
-        } catch (ActivitiException e) {
+        }
+        catch (ActivitiException e) {
             if (e.getMessage().indexOf("no processes deployed with key") != -1) {
                 redirectAttributes.addFlashAttribute("error", "没有部署流程，请在[工作流]->[流程管理]页面点击<重新部署流程>");
             } else {
                 redirectAttributes.addFlashAttribute("error", "系统内部错误！");
             }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "系统内部错误！");
         }
         return "redirect:/experiment/list/task";
     }

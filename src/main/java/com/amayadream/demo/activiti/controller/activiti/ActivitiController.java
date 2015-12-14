@@ -242,14 +242,12 @@ public class ActivitiController {
   }
 
   @RequestMapping(value = "/deploy")
-  public String deploy(@Value("#{APP_PROPERTIES['export.diagram.path']}") String exportDir, @RequestParam(value = "file", required = false) MultipartFile file) {
-
+  public String deploy(@RequestParam(value = "file", required = false) MultipartFile file) {
+    String exportDir = "";
     String fileName = file.getOriginalFilename();
-
     try {
       InputStream fileInputStream = file.getInputStream();
       Deployment deployment = null;
-
       String extension = FilenameUtils.getExtension(fileName);
       if (extension.equals("zip") || extension.equals("bar")) {
         ZipInputStream zip = new ZipInputStream(fileInputStream);
@@ -257,17 +255,13 @@ public class ActivitiController {
       } else {
         deployment = repositoryService.createDeployment().addInputStream(fileName, fileInputStream).deploy();
       }
-
       List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list();
-
       for (ProcessDefinition processDefinition : list) {
         WorkflowUtils.exportDiagramToFile(repositoryService, processDefinition, exportDir);
       }
-
     } catch (Exception e) {
       logger.error("error on deploy process, because of file input stream", e);
     }
-
     return "redirect:/workflow/process-list";
   }
 
@@ -295,11 +289,8 @@ public class ActivitiController {
     modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
     modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, processDefinition.getDescription());
     modelData.setMetaInfo(modelObjectNode.toString());
-
     repositoryService.saveModel(modelData);
-
     repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
-
     return "redirect:/workflow/model/list";
   }
 
