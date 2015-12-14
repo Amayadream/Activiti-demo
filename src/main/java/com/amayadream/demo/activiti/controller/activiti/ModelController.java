@@ -151,6 +151,7 @@ public class ModelController {
       IOUtils.copy(in, response.getOutputStream());
 
       response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+      response.setCharacterEncoding("utf-8");
       response.flushBuffer();
     } catch (Exception e) {
       logger.error("导出model的xml文件失败：modelId={}, type={}", modelId, type, e);

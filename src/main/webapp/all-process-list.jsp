@@ -3,7 +3,7 @@
 <%String path = request.getContextPath();%>
 <html>
 <head>
-  <title>实验管理|运行中的流程</title>
+  <title>工作区|所有流程</title>
   <link href="<%=path%>/plugins/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
   <link href="<%=path%>/plugins/scojs/css/sco.message.css" type="text/css" rel="stylesheet">
@@ -12,14 +12,6 @@
   <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
   <script type="text/javascript">
-  </script>
-  <script type="text/javascript">
-      $(function(){
-        $('#deploy').click(function() {
-          $('#deployForm').slideToggle('fast');
-          return false;
-        });
-      });
   </script>
 </head>
 <body>
@@ -48,8 +40,8 @@
         <li class="dropdown active">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li class="active"><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
-            <li><a href="<%=path%>/workflow/processinstance/process-list">所有流程 </a></li>
+            <li><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
+            <li class="active"><a href="<%=path%>/workflow/processinstance/process-list">所有流程 </a></li>
             <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
             <li><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
           </ul>
@@ -71,57 +63,33 @@
 
 <div>
   <div class="well">
-    <h2>工作区/<small>流程定义及部署管理</small></h2>
+    <h1>工作区/<small>模型工作区</small></h1>
   </div>
   <div class="well">
-    <button class="btn btn-primary" id="deploy" style="float:right">部署流程</button>
-    <div id="deployForm" style="display: none">
-      <h3>部署新流程/<small>支持的格式有:zip、bar、bpmn、bpmn20.xml</small></h3>
-      <form action="<%=path%>/workflow/deploy" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <input type="submit" value="提交" />
-      </form>
-    </div>
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th>ProcessDefinitionId</th>
-        <th>DeploymentId</th>
+        <th>ID</th>
+        <th>DID</th>
         <th>名称</th>
         <th>KEY</th>
         <th>版本号</th>
         <th>XML</th>
         <th>图片</th>
-        <th>部署时间</th>
-        <th>是否挂起</th>
         <th>操作</th>
       </tr>
       </thead>
       <tbody>
-      <c:forEach items="${page.result }" var="object">
-        <c:set var="process" value="${object[0] }" />
-        <c:set var="deployment" value="${object[1] }" />
+      <c:forEach items="${page.result }" var="process">
         <tr>
-          <td>${process.id }</td>
+          <td class='process-id'>${process.id }</td>
           <td>${process.deploymentId }</td>
-          <td>${process.name }</td>
+          <td class='process-name'>${process.name }</td>
           <td>${process.key }</td>
           <td>${process.version }</td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
-          <td>${deployment.deploymentTime }</td>
-          <td>${process.suspended} |
-            <c:if test="${process.suspended }">
-              <a href="processdefinition/update/active/${process.id}">激活</a>
-            </c:if>
-            <c:if test="${!process.suspended }">
-              <a href="processdefinition/update/suspend/${process.id}">挂起</a>
-            </c:if>
-          </td>
-          <td>
-            <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}'>删除</a>
-            <a href='<%=path%>/workflow/process/convert-to-model/${process.id}'>转换为Model</a>
-          </td>
+          <td><a href="<%=path%>/workflow/processinstance/start">启动</a></td>
         </tr>
       </c:forEach>
       </tbody>
@@ -129,25 +97,6 @@
   </div>
 </div>
 
-<!-- 删除模态框 -->
-<div class="modal fade" id="show-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title" id="model2">
-          <span class="glyphicon glyphicon-search"></span> 流程图
-        </h4>
-      </div>
-      <div class="modal-body">
-        <img src="" id="img">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <script>
   <c:if test="${not empty error}">

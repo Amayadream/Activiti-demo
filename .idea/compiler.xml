@@ -26,8 +26,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Activiti-demo" target="1.5" />
-      <module name="SSM-demo" target="1.5" />
+      <module name="Activiti-demo" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

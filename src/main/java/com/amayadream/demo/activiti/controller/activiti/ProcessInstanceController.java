@@ -1,8 +1,16 @@
 package com.amayadream.demo.activiti.controller.activiti;
 
+import com.amayadream.demo.activiti.service.experiment.ExperimentWorkflowService;
+import com.amayadream.demo.pojo.Experiment;
+import com.amayadream.demo.pojo.User;
 import com.amayadream.demo.util.Page;
 import com.amayadream.demo.util.PageUtil;
+import com.amayadream.demo.util.UserUtil;
+import org.activiti.engine.ActivitiException;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +18,66 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/workflow/processinstance")
 public class ProcessInstanceController {
 
-  @Autowired
-  private RuntimeService runtimeService;
+    @Autowired
+    private RuntimeService runtimeService;
+    @Autowired
+    private RepositoryService repositoryService;
+    @Autowired
+    protected ExperimentWorkflowService workflowService;
+
+    /**
+     * 查询所有流程
+     * @param model     model
+     * @param request   request
+     * @return
+     */
+    @RequestMapping(value = "process-list")
+    public ModelAndView all(Model model, HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("/all-process-list");
+        Page<ProcessDefinition> page = new Page<ProcessDefinition>(PageUtil.PAGE_SIZE);
+        int[] pageParams = PageUtil.init(page, request);
+        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery().active().orderByDeploymentId().desc();
+        List<ProcessDefinition> list = query.list();
+        page.setResult(list);
+        page.setTotalCount(query.count());
+        mav.addObject("page", page);
+        return mav;
+    }
+
+    @RequestMapping(value = "start")
+    public String start(Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
+        try {
+            org.activiti.engine.identity.User user = UserUtil.getUserFromSession(session);
+            experiment.setUserid(user.getId());
+            Map<String, Object> variables = new HashMap<String, Object>();
+            ProcessInstance processInstance = workflowService.startWorkflow(experiment, variables);
+            redirectAttributes.addFlashAttribute("message", "流程已启动，流程ID：" + processInstance.getId());
+        } catch (ActivitiException e) {
+            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+                redirectAttributes.addFlashAttribute("error", "没有部署流程，请在[工作流]->[流程管理]页面点击<重新部署流程>");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "系统内部错误！");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "系统内部错误！");
+        }
+        return "redirect:/experiment/list/task";
+    }
 
   /**
    * 查询所有运行中的流程
@@ -34,7 +90,7 @@ public class ProcessInstanceController {
     ModelAndView mav = new ModelAndView("running-manage");
     Page<ProcessInstance> page = new Page<ProcessInstance>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
-    
+
     ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
     List<ProcessInstance> list = processInstanceQuery.listPage(pageParams[0], pageParams[1]);
     page.setResult(list);

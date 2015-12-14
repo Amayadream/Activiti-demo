@@ -41,6 +41,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
+            <li><a href="<%=path%>/workflow/processinstance/process-list">所有流程 </a></li>
             <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
             <li class="active"><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
           </ul>
