@@ -80,6 +80,20 @@
                 <!--<value>classpath*:/deployments/*</value>-->
             <!--</list>-->
         <!--</property>-->
+        <property name="customSessionFactories">
+            <list>
+                <bean class="com.amayadream.demo.extend.CustomGroupManagerFactory" >
+                    <property name="groupEntityManager">
+                        <bean class="com.amayadream.demo.extend.CustomGroupManager"></bean>
+                    </property>
+                </bean>
+                <bean class="com.amayadream.demo.extend.CustomUserManagerFactory" >
+                    <property  name="userEntityManager">
+                        <bean id="userEntityManager" class="com.amayadream.demo.extend.CustomUserManager"></bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
     </bean>
 
     <!-- activiti的各种服务接口 -->
