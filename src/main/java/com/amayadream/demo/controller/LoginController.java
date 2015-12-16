@@ -43,14 +43,14 @@ public class LoginController {
             User user = identityService.createUserQuery().userId(username).singleResult();
             UserUtil.saveUserToSession(session, user);
             //读取用户组
-            List<Group> groupList = identityService.createGroupQuery().groupMember(username).list();
-            session.setAttribute("groups", groupList);
-            String[] groupnames = new String[groupList.size()];
-            for (int i = 0; i < groupnames.length; i++) {
-                System.out.println(groupList.get(i).getName());
-                groupnames[i] = groupList.get(i).getName();
-            }
-            session.setAttribute("groupnames", ArrayUtils.toString(groupnames));
+//            List<Group> groupList = identityService.createGroupQuery().groupMember(username).list();
+//            session.setAttribute("groups", groupList);
+//            String[] groupnames = new String[groupList.size()];
+//            for (int i = 0; i < groupnames.length; i++) {
+//                System.out.println(groupList.get(i).getName());
+//                groupnames[i] = groupList.get(i).getName();
+//            }
+//            session.setAttribute("groupnames", ArrayUtils.toString(groupnames));
             return "redirect:/experiment/list/task";
         } else {
             return "redirect:/login?error=true";

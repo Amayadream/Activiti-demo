@@ -27,10 +27,6 @@ public class IGroupServiceImpl implements IGroupService {
         return groupDao.selectGroupByUsername(username);
     }
 
-    public Group selectGroupById(String id) {
-        return groupDao.selectGroupById(id);
-    }
-
     public boolean insert(Group group) {
         return groupDao.insert(group);
     }

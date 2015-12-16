@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.amayadream.demo.service.IUserService;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.identity.UserQuery;
@@ -13,6 +14,8 @@ import org.activiti.engine.impl.persistence.entity.IdentityInfoEntity;
 import org.activiti.engine.impl.persistence.entity.UserEntity;
 import org.activiti.engine.impl.persistence.entity.UserEntityManager;
 
+import javax.annotation.Resource;
+
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.extend
  * Author :  Amayadream
@@ -20,7 +23,8 @@ import org.activiti.engine.impl.persistence.entity.UserEntityManager;
  * TODO   :  自定义的Activiti用户组管理器
  */
 public class CustomUserManager extends UserEntityManager {
-
+    @Resource
+    private IUserService userService;
     /**
      * 创建一个User实体
      * @param userId 用户id,实际为用户名
@@ -60,7 +64,14 @@ public class CustomUserManager extends UserEntityManager {
     public User findUserById(String userId) {
         // TODO Auto-generated method stub
         System.out.println("findUserById");
-        return super.findUserById(userId);
+        com.amayadream.demo.pojo.User user = userService.selectUserById(userId);
+        User user1 = new UserEntity();
+        user1.setId(user.getUsername());
+        user1.setPassword(user.getPassword());
+        user1.setFirstName(user.getFirstname());
+        user1.setLastName(user.getLastname());
+        user1.setEmail(user.getEmail());
+        return user1;
     }
 
     /**
@@ -82,14 +93,15 @@ public class CustomUserManager extends UserEntityManager {
     public List<User> findUserByQueryCriteria(UserQueryImpl query, Page page) {
         // TODO Auto-generated method stub
         System.out.println("findUserByQueryCriteria");
-        User user = new UserEntity();
-        user.setId("asd");
-        user.setEmail("asdasd.qq.com");
-        user.setFirstName("First");
-        user.setLastName("Last");
-        user.setPassword("123456");
+        com.amayadream.demo.pojo.User user = userService.selectUserById(query.getId());
+        User user1 = new UserEntity();
+        user1.setId(user.getUsername());
+        user1.setPassword(user.getPassword());
+        user1.setFirstName(user.getFirstname());
+        user1.setLastName(user.getLastname());
+        user1.setEmail(user.getEmail());
         List<User> list = new ArrayList<User>();
-        list.add(user);
+        list.add(user1);
         return list;
 //        return super.findUserByQueryCriteria(query, page);
     }
@@ -157,13 +169,16 @@ public class CustomUserManager extends UserEntityManager {
      */
     public Boolean checkPassword(String userId, String password) {
         // TODO Auto-generated method stub
-        System.out.println("checkPassword");
-        if(userId.equals("Amayadream")&&password.equals("123456")){
-            return true;
-        }else{
+        com.amayadream.demo.pojo.User user = userService.selectUserById(userId);
+        if(user == null){
             return false;
+        }else{
+            if(password.equals(user.getPassword())){
+                return true;
+            }else{
+                return false;
+            }
         }
-//        return super.checkPassword(userId, password);
     }
 
     /**

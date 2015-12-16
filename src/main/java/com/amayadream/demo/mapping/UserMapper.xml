@@ -3,48 +3,48 @@
 <mapper namespace="com.amayadream.demo.dao.IUserDao" >
 
 	<resultMap id="BaseResultMap" type="com.amayadream.demo.pojo.User" >
-		<id column="ID_" property="id" jdbcType="VARCHAR" />
-		<result column="EMAIL_" property="email" jdbcType="VARCHAR" />
-		<result column="FIRST_" property="first" jdbcType="VARCHAR" />
-		<result column="LAST_" property="last" jdbcType="VARCHAR" />
-		<result column="PASSWORD_" property="password" jdbcType="VARCHAR" />
+		<id column="USERNAME" property="username" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="FIRSTNAME" property="firstname" jdbcType="VARCHAR" />
+		<result column="LASTNAME" property="lastname" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List" >
-		ID_, EMAIL_, FIRST_, LAST_, PASSWORD_
+		USERNAME, PASSWORD, FIRSTNAME, LASTNAME, EMAIL
 	</sql>
 
 	<!-- 查询所有用户 -->
 	<select id="selectAll" resultMap="BaseResultMap" >
 		SELECT <include refid="Base_Column_List" />
-		FROM ACT_ID_USER
+		FROM TEST_USER
 	</select>
 
 	<!-- 根据用户id查询用户 -->
 	<select id="selectUserById" resultMap="BaseResultMap" parameterType="string" >
 		SELECT
 		<include refid="Base_Column_List" />
-		FROM ACT_ID_USER
-		WHERE ID = #{id, jdbcType=VARCHAR}
+		FROM TEST_USER
+		WHERE USERNAME = #{username, jdbcType=VARCHAR}
 	</select>
 
 	<!-- 插入用户 -->
 	<insert id="insert" parameterType="com.amayadream.demo.pojo.User" >
-		INSERT INTO ACT_ID_USER (ID_, EMAIL_, FIRST_, LAST_ ,PASSWORD_)
-		VALUES (sys_guid(), #{email, jdbcType=VARCHAR}, #{first, jdbcType=VARCHAR}, #{last, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR})
+		INSERT INTO TEST_USER (USERNAME, PASSWORD, FIRSTNAME, LASTNAME ,EMAIL)
+		VALUES (#{username, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{firstname, jdbcType=VARCHAR}, #{lastname, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 更新用户 -->
 	<update id="update" parameterType="com.amayadream.demo.pojo.User">
-		UPDATE ACT_ID_USER
-		SET EMAIL_ = #{username, jdbcType=VARCHAR}, FIRST_ = #{password, jdbcType=VARCHAR}, LAST_ = #{email, jdbcType=VARCHAR}, PASSWORD_ = #{password, jdbcType=VARCHAR}
-		WHERE ID_ = #{id, jdbcType=VARCHAR}
+		UPDATE TEST_USER
+		SET PASSWORD = #{password, jdbcType=VARCHAR}, FIRSTNAME = #{firstname, jdbcType=VARCHAR}, LASTNAME = #{lastname, jdbcType=VARCHAR}, EMAIL = #{email, jdbcType=VARCHAR}
+		WHERE USERNAME = #{username, jdbcType=VARCHAR}
 	</update>
 
 	<!-- 删除用户 -->
 	<delete id="delete" parameterType="string" >
-		DELETE FROM ACT_ID_USER
-		WHERE ID_ = #{id, jdbcType=VARCHAR}
+		DELETE FROM TEST_USER
+		WHERE USERNAME = #{username, jdbcType=VARCHAR}
 	</delete>
 
 </mapper>

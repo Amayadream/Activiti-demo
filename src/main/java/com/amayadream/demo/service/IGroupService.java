@@ -13,7 +13,6 @@ import java.util.List;
 public interface IGroupService {
     List<Group> selectAll();
     List<Group> selectGroupByUsername(String username);
-    Group selectGroupById(String id);
     boolean insert(Group group);
     boolean update(Group group);
     boolean delete(String id);
