@@ -11,32 +11,31 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.serviceImpl
  * Author :  Amayadream
- * Date   :  2015.12.08 15:21
+ * Date   :  2015.12.16 17:27
  * TODO   :
  */
 @Service("groupService")
-public class GroupServiceImpl implements IGroupService {
-    @Resource private IGroupDao groupDao;
-    @Resource private Group group;
+public class IGroupServiceImpl implements IGroupService {
+    @Resource
+    private IGroupDao groupDao;
 
     public List<Group> selectAll() {
         return groupDao.selectAll();
+    }
+
+    public List<Group> selectGroupByUsername(String username) {
+        return groupDao.selectGroupByUsername(username);
     }
 
     public Group selectGroupById(String id) {
         return groupDao.selectGroupById(id);
     }
 
-    public boolean insert(String name, String type) {
-        group.setName(name);
-        group.setType(type);
+    public boolean insert(Group group) {
         return groupDao.insert(group);
     }
 
-    public boolean update(String id, String name, String type) {
-        group.setId(id);
-        group.setName(name);
-        group.setType(type);
+    public boolean update(Group group) {
         return groupDao.update(group);
     }
 

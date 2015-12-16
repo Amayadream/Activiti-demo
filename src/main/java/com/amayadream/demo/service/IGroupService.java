@@ -7,13 +7,14 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.service
  * Author :  Amayadream
- * Date   :  2015.12.08 15:16
+ * Date   :  2015.12.16 17:24
  * TODO   :
  */
 public interface IGroupService {
     List<Group> selectAll();
+    List<Group> selectGroupByUsername(String username);
     Group selectGroupById(String id);
-    boolean insert(String name, String type);
-    boolean update(String id, String name, String type);
+    boolean insert(Group group);
+    boolean update(Group group);
     boolean delete(String id);
 }

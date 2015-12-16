@@ -11,40 +11,31 @@ import java.util.List;
 /**
  * NAME   :  Activiti-demo/com.amayadream.demo.serviceImpl
  * Author :  Amayadream
- * Date   :  2015.12.08 14:51
+ * Date   :  2015.12.16 17:26
  * TODO   :
  */
 @Service("userService")
 public class UserServiceImpl implements IUserService {
-    @Resource private IUserDao userDao;
-    @Resource private User user;
+    @Resource
+    private IUserDao userDao;
 
     public List<User> selectAll() {
         return userDao.selectAll();
     }
 
-    public User selectUserById(String id) {
-        return userDao.selectUserById(id);
+    public User selectUserById(String username) {
+        return userDao.selectUserById(username);
     }
 
-    public boolean insert(String email, String first, String last, String password) {
-        user.setEmail(email);
-        user.setFirst(first);
-        user.setLast(last);
-        user.setPassword(password);
+    public boolean insert(User user) {
         return userDao.insert(user);
     }
 
-    public boolean update(String id, String email, String first, String last, String password) {
-        user.setId(id);
-        user.setEmail(email);
-        user.setFirst(first);
-        user.setLast(last);
-        user.setPassword(password);
+    public boolean update(User user) {
         return userDao.update(user);
     }
 
-    public boolean delete(String id) {
-        return userDao.delete(id);
+    public boolean delete(String username) {
+        return userDao.delete(username);
     }
 }

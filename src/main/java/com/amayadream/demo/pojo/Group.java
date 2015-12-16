@@ -8,14 +8,13 @@ import java.util.List;
  * NAME   :  Activiti-demo/com.amayadream.demo.pojo
  * Author :  Amayadream
  * Date   :  2015.12.08 14:46
- * TODO   :
+ * TODO   :  自定义分组类
  */
 @Repository
 public class Group {
-    private String id;
-    private String name;
-    private String type;
-    private List<User> actIdUsers;
+    private String id;      //分组编号
+    private String name;    //分组名
+    private String type;    //类型
 
     /**
      * getter&setter
@@ -45,11 +44,4 @@ public class Group {
         this.type = type;
     }
 
-    public List<User> getActIdUsers() {
-        return actIdUsers;
-    }
-
-    public void setActIdUsers(List<User> actIdUsers) {
-        this.actIdUsers = actIdUsers;
-    }
 }

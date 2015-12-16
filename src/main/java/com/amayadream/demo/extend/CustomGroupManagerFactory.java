@@ -21,7 +21,7 @@ public class CustomGroupManagerFactory implements SessionFactory {
     }
 
     public Class<?> getSessionType() {
-        // 返回原始的GroupIdentityManager类型
+        // 返回原始的GroupIdentityManager类型,引擎的实体管理器接口
         return GroupIdentityManager.class;
     }
 

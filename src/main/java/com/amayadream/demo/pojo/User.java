@@ -8,51 +8,26 @@ import java.util.List;
  * NAME   :  Activiti-demo/com.amayadream.demo.pojo
  * Author :  Amayadream
  * Date   :  2015.12.08 14:40
- * TODO   :
+ * TODO   :  自定义用户实体类
  */
 @Repository
 public class User {
-    private String id;
-    private String email;
-    private String first;
-    private String last;
-    private String password;
-    private List<Group> actIdGroups;
+    private String username;    //用户名
+    private String password;    //密码
+    private String firstname;   //姓
+    private String lastname;    //名
+    private String email;       //邮箱
 
     /**
      * getter&setter
      * @return
      */
-    public String getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirst() {
-        return first;
-    }
-
-    public void setFirst(String first) {
-        this.first = first;
-    }
-
-    public String getLast() {
-        return last;
-    }
-
-    public void setLast(String last) {
-        this.last = last;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -63,11 +38,27 @@ public class User {
         this.password = password;
     }
 
-    public List<Group> getActIdGroups() {
-        return actIdGroups;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setActIdGroups(List<Group> actIdGroups) {
-        this.actIdGroups = actIdGroups;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
