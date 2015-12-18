@@ -75,11 +75,11 @@
         <property name="labelFontName" value="宋体"/>
 
         <!-- 会部署在ACT_RE_DEPLOYMENT表,暂时不知道有什么作用 -->
-        <property name="deploymentResources">
-            <list>
-                <value>classpath*:/deployments/*</value>
-            </list>
-        </property>
+        <!--<property name="deploymentResources">-->
+            <!--<list>-->
+                <!--<value>classpath*:/deployments/*</value>-->
+            <!--</list>-->
+        <!--</property>-->
         <property name="customSessionFactories">
             <list>
                 <bean class="com.amayadream.demo.extend.CustomGroupManagerFactory" >

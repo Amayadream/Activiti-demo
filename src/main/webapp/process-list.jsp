@@ -93,8 +93,8 @@
         <th>XML</th>
         <th>图片</th>
         <th>部署时间</th>
-        <th>是否挂起</th>
-        <th>操作</th>
+        <th width="10%">是否挂起</th>
+        <th width="15%">操作</th>
       </tr>
       </thead>
       <tbody>
@@ -110,17 +110,17 @@
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
           <td>${deployment.deploymentTime }</td>
-          <td>${process.suspended} |
+          <td>
             <c:if test="${process.suspended }">
-              <a href="processdefinition/update/active/${process.id}">激活</a>
+              <span class="label label-danger">已挂起</span>  <a href="processdefinition/update/active/${process.id}" class="btn btn-sm btn-success">激活</a>
             </c:if>
             <c:if test="${!process.suspended }">
-              <a href="processdefinition/update/suspend/${process.id}">挂起</a>
+              <span class="label label-success">已激活</span>  <a href="processdefinition/update/suspend/${process.id}" class="btn btn-sm btn-danger">挂起</a>
             </c:if>
           </td>
           <td>
-            <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}'>删除</a>
-            <a href='<%=path%>/workflow/process/convert-to-model/${process.id}'>转换为Model</a>
+            <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}' class="btn btn-sm btn-danger">删除</a>
+            <a href='<%=path%>/workflow/process/convert-to-model/${process.id}' class="btn btn-sm btn-success">转换为Model</a>
           </td>
         </tr>
       </c:forEach>

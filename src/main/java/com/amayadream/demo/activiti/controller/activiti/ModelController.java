@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.amayadream.demo.util.ActivitiUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -104,7 +105,7 @@ public class ModelController {
       Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes,"UTF-8")).deploy();  //这里务必加上utf-8,否则各种乱码,切记切记
       redirectAttributes.addFlashAttribute("message", "部署成功，部署ID=" + deployment.getId());
     } catch (Exception e) {
-      logger.error("根据模型部署流程失败：modelId={}", modelId, e);
+      redirectAttributes.addFlashAttribute("error", "部署失败!");
     }
     return "redirect:/workflow/model/list";
   }
@@ -147,6 +148,8 @@ public class ModelController {
         filename = mainProcessId + ".json";
       }
 
+      String srt2=new String(exportBytes,"UTF-8");
+      System.out.println(srt2);
       ByteArrayInputStream in = new ByteArrayInputStream(exportBytes);
       IOUtils.copy(in, response.getOutputStream());
 
@@ -155,6 +158,28 @@ public class ModelController {
       response.flushBuffer();
     } catch (Exception e) {
       logger.error("导出model的xml文件失败：modelId={}, type={}", modelId, type, e);
+    }
+  }
+
+  /**
+   * 获取string类型的xml做解析
+   * @param modelId
+   * @param type
+   * @param response
+     * @return
+     */
+  @RequestMapping(value = "getXml/{modelId}")
+  public ModelAndView getXml(@PathVariable("modelId") String modelId, ActivitiUtil activitiUtil){
+    ModelAndView mav = new ModelAndView("/result");
+    Model modelData = repositoryService.getModel(modelId);
+    byte[] modelEditorSource = repositoryService.getModelEditorSource(modelData.getId());
+    String xml = activitiUtil.getStringXmlByByte(modelEditorSource);
+    if(xml != null){
+      List<ActivitiUtil> list = activitiUtil.getInfoByStringXml(xml);
+      mav.addObject("result",list);
+      return mav;
+    }else{
+      return null;
     }
   }
 

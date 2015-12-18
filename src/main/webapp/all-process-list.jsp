@@ -89,7 +89,7 @@
           <td>${process.version }</td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
           <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
-          <td><a href="<%=path%>/workflow/processinstance/start/${process.id}">启动</a></td>
+          <td><a href="<%=path%>/workflow/processinstance/start/${process.id}" class="btn btn-sm btn-success">启动</a></td>
         </tr>
       </c:forEach>
       </tbody>

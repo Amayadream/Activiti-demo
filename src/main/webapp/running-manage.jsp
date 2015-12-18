@@ -94,14 +94,21 @@
           <td>${p.id }</td>
           <td>${p.processInstanceId }</td>
           <td>${p.processDefinitionId }</td>
-          <td><button class="btn btn-success btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
-          <td>${p.suspended }</td>
+          <td><button class="btn btn-primary btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
+          <td>
+            <c:if test="${p.suspended}">
+              <span class="label label-danger">已挂起</span>
+            </c:if>
+            <c:if test="${!p.suspended}">
+              <span class="label label-success">正常</span>
+            </c:if>
+          </td>
           <td>
             <c:if test="${p.suspended }">
-              <a href="<%=path%>/workflow/processinstance/update/active/${p.processInstanceId}">激活</a>
+              <a href="<%=path%>/workflow/processinstance/update/active/${p.processInstanceId}" class="btn btn-sm btn-success">激活</a>
             </c:if>
             <c:if test="${!p.suspended }">
-              <a href="<%=path%>/workflow/processinstance/update/suspend/${p.processInstanceId}">挂起</a>
+              <a href="<%=path%>/workflow/processinstance/update/suspend/${p.processInstanceId}" class="btn btn-sm btn-danger">挂起</a>
             </c:if>
           </td>
         </tr>

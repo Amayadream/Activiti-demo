@@ -8,7 +8,6 @@
   <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
   <link href="<%=path%>/plugins/scojs/css/sco.message.css" type="text/css" rel="stylesheet">
   <script src="<%=path%>/plugins/jquery/jquery-2.1.4.min.js"></script>
-  <script src="<%=path%>/static/activiti/common.js"></script>
   <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
   <script type="text/javascript">
@@ -80,6 +79,7 @@
           <th>当前节点</th>
           <th>任务创建时间</th>
           <th>流程状态</th>
+          <th>使用工具</th>
           <th>操作</th>
         </tr>
       </thead>
@@ -93,18 +93,19 @@
             <td>${experiment.starttime }</td>
             <td>${experiment.endtime }</td>
             <td>
-              <button class="btn btn-success btn-sm show" id="${pi.id}" onclick="showPage('${pi.id}');">${task.name }</button>
+              <button class="btn btn-primary btn-sm show" id="${pi.id}" onclick="showPage('${pi.id}');">${task.name }</button>
             </td>
               <%--<td><a target="_blank" href='${ctx }/workflow/resource/process-instance?pid=${pi.id }&type=xml'>${task.name }</a></td> --%>
             <td>${task.createTime }</td>
             <td>${pi.suspended ? "已挂起" : "正常" }；<b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
+            <td><span class="label label-info">${task.description}</span></td>
             <td>
               <c:if test="${empty task.assignee }">
-                <a href="<%=path%>/experiment/task/claim/${task.id}">签收</a>
+                <a href="<%=path%>/experiment/task/claim/${task.id}" class="btn btn-info btn-sm">签收</a>
               </c:if>
               <c:if test="${not empty task.assignee }">
-                <a href="<%=path%>/experiment/complete1/${task.id}/false">回退</a>|
-                <a href="<%=path%>/experiment/complete1/${task.id}/true">继续</a>
+                <a href="<%=path%>/experiment/complete1/${task.id}/false" class="btn btn-danger btn-sm">回退</a>
+                <a href="<%=path%>/experiment/complete1/${task.id}/true" class="btn btn-success btn-sm">继续</a>
               </c:if>
             </td>
           </tr>
