@@ -188,28 +188,38 @@ public class ModelController {
     }
   }
 
+  /**
+   * 修改模型
+   * @param modelId
+   * @param name
+   * @param groups
+   * @param tools
+   * @param activitiUtil
+     */
   @RequestMapping(value = "saveModel")
-  public void saveModel(@RequestParam("id") String modelId, @RequestParam String[] name, @RequestParam String[] groups, @RequestParam String[] tools, ActivitiUtil activitiUtil){
+  public String saveModel(@RequestParam("id") String modelId, @RequestParam String[] name, @RequestParam String[] groups, @RequestParam String[] tools, ActivitiUtil activitiUtil, RedirectAttributes redirectAttributes){
     try {
-//    ModelAndView mav = new ModelAndView("/result");
       Model modelData = repositoryService.getModel(modelId);
       byte[] modelEditorSource = repositoryService.getModelEditorSource(modelData.getId());
       String xml = activitiUtil.getStringXmlByByte(modelEditorSource);
-      xml.replaceFirst("\n","");
-      byte[] data = activitiUtil.setInfoByStringXml(xml, name, groups, tools);
+      String data = activitiUtil.setInfoByStringXml(xml, name, groups, tools);
       XMLInputFactory xif = XMLInputFactory.newInstance();
       BpmnJsonConverter converter = new BpmnJsonConverter();
-      InputStream bpmnStream = new ByteArrayInputStream(data);   //byte[] 转换成 inputstrem
-      InputStreamReader in = new InputStreamReader(bpmnStream, "UTF-8");
+      ByteArrayInputStream is = new ByteArrayInputStream(data.getBytes("utf-8"));
+      InputStreamReader in = new InputStreamReader(is, "utf-8");
       XMLStreamReader xtr = xif.createXMLStreamReader(in);
       BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
       ObjectNode modelNode = converter.convertToJson(bpmnModel);
       repositoryService.addModelEditorSource(modelId, modelNode.toString().getBytes("utf-8"));
+      redirectAttributes.addFlashAttribute("message","配置成功");
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
+      redirectAttributes.addFlashAttribute("error","配置失败,请重试~");
     } catch (XMLStreamException e) {
       e.printStackTrace();
+      redirectAttributes.addFlashAttribute("error","配置失败,请重试~");
     }
+    return "redirect:/workflow/model/list";
   }
 
 

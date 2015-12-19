@@ -86,14 +86,14 @@ public class ActivitiUtil {
     }
 
     /**
-     * 接收字符串类型的xml,然后设置每个userTask的角色以及工具
+     * 接收字符串类型的xml,然后设置每个userTask的角色以及工具,然后返回String
      * @param xml       字符串类型的xml
      * @param name      userTask名称
      * @param groups    角色
      * @param tools     工具
      * @return
      */
-    public byte[] setInfoByStringXml(String xml, String[] name, String[] groups, String[] tools){
+    public String setInfoByStringXml(String xml, String[] name, String[] groups, String[] tools){
         try {
             Document document = null;      //读取字符串形式的xml,转化成org.dom4j.document
             document = DocumentHelper.parseText(xml);
@@ -109,13 +109,7 @@ public class ActivitiUtil {
                     }
                 }
             }
-//            writerDocumentToNewFile(document);
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(byteOut);
-            out.writeObject(document);
-            out.close();
-            byte[] data = byteOut.toByteArray();
-            return data;
+            return document.asXML();
         } catch (DocumentException e) {     //返回null
             e.printStackTrace();
             return null;
