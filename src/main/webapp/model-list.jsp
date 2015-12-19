@@ -97,6 +97,7 @@
           <td>${model.metaInfo}</td>
           <td>
             <a href="<%=path%>/modeler.html?modelId=${model.id}" target="_blank">编辑</a>
+            <a href="<%=path%>/workflow/model/getXml/${model.id}" target="_blank">角色工具</a>
             <a href="<%=path%>/workflow/model/deploy/${model.id}">部署</a>
             导出(<a href="<%=path%>/workflow/model/export/${model.id}/bpmn" target="_blank">BPMN</a>
             |&nbsp;<a href="<%=path%>/workflow/model/export/${model.id}/json" target="_blank">JSON</a>)

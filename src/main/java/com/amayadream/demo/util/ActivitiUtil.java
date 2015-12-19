@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.engine.RepositoryService;
 import org.dom4j.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,9 @@ import java.util.List;
  */
 public class ActivitiUtil {
 
-    private String name;
-    private String groups;
-    private String tools;
+    private String name;    //userTask名称
+    private String groups;  //角色分组
+    private String tools;   //使用工具
 
     /**
      * 获取字符串形式的模型xml,返回null则代表失败
@@ -82,6 +83,61 @@ public class ActivitiUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 接收字符串类型的xml,然后设置每个userTask的角色以及工具
+     * @param xml       字符串类型的xml
+     * @param name      userTask名称
+     * @param groups    角色
+     * @param tools     工具
+     * @return
+     */
+    public byte[] setInfoByStringXml(String xml, String[] name, String[] groups, String[] tools){
+        try {
+            Document document = null;      //读取字符串形式的xml,转化成org.dom4j.document
+            document = DocumentHelper.parseText(xml);
+            //获取根节点元素对象
+            Element definitions = document.getRootElement();    //根节点definitions
+            Element process = definitions.element("process");   //二层节点process
+            List<Element> userTasks = process.elements("userTask");     //用户任务,其中可以读取activiti:candidateGroups的属性,为角色组
+            for (Element node : userTasks) {
+                for(int i=0;i<=name.length-1;i++){
+                    if(name[i].equals(node.attribute("name").getStringValue())){
+                        node.attribute("candidateGroups").setValue(groups[i]);
+                        node.element("documentation").setText(tools[i]);
+                    }
+                }
+            }
+//            writerDocumentToNewFile(document);
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(byteOut);
+            out.writeObject(document);
+            out.close();
+            byte[] data = byteOut.toByteArray();
+            return data;
+        } catch (DocumentException e) {     //返回null
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("写入错误!");
+            return null;
+        }
+    }
+
+    //document写入新的文件
+    public void writerDocumentToNewFile(Document document)throws Exception{
+        //输出格式
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        //设置编码
+        format.setEncoding("UTF-8");
+        //XMLWriter 指定输出文件以及格式
+        XMLWriter writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(new File("C:\\Users\\Administrator\\Desktop\\test.xml")),"UTF-8"), format);
+        //写入新文件
+        writer.write(document);
+        writer.flush();
+        writer.close();
     }
 
     public String getName() {

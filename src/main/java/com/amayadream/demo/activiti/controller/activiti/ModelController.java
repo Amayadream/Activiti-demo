@@ -1,19 +1,28 @@
 package com.amayadream.demo.activiti.controller.activiti;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import com.amayadream.demo.util.ActivitiUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.impl.util.io.InputStreamSource;
+import org.activiti.engine.impl.util.io.StreamSource;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.apache.commons.io.IOUtils;
@@ -116,9 +125,7 @@ public class ModelController {
    * @param type 导出文件类型(bpmn\json)
    */
   @RequestMapping(value = "export/{modelId}/{type}")
-  public void export(@PathVariable("modelId") String modelId,
-                     @PathVariable("type") String type,
-                     HttpServletResponse response) {
+  public void export(@PathVariable("modelId") String modelId, @PathVariable("type") String type, HttpServletResponse response) {
     try {
       Model modelData = repositoryService.getModel(modelId);
       BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
@@ -147,9 +154,6 @@ public class ModelController {
         exportBytes = modelEditorSource;
         filename = mainProcessId + ".json";
       }
-
-      String srt2=new String(exportBytes,"UTF-8");
-      System.out.println(srt2);
       ByteArrayInputStream in = new ByteArrayInputStream(exportBytes);
       IOUtils.copy(in, response.getOutputStream());
 
@@ -162,7 +166,7 @@ public class ModelController {
   }
 
   /**
-   * 获取string类型的xml做解析
+   * 解析模型,获取步骤名称,角色以及工具
    * @param modelId
    * @param type
    * @param response
@@ -177,9 +181,34 @@ public class ModelController {
     if(xml != null){
       List<ActivitiUtil> list = activitiUtil.getInfoByStringXml(xml);
       mav.addObject("result",list);
+      mav.addObject("modelId",modelId);
       return mav;
     }else{
       return null;
+    }
+  }
+
+  @RequestMapping(value = "saveModel")
+  public void saveModel(@RequestParam("id") String modelId, @RequestParam String[] name, @RequestParam String[] groups, @RequestParam String[] tools, ActivitiUtil activitiUtil){
+    try {
+//    ModelAndView mav = new ModelAndView("/result");
+      Model modelData = repositoryService.getModel(modelId);
+      byte[] modelEditorSource = repositoryService.getModelEditorSource(modelData.getId());
+      String xml = activitiUtil.getStringXmlByByte(modelEditorSource);
+      xml.replaceFirst("\n","");
+      byte[] data = activitiUtil.setInfoByStringXml(xml, name, groups, tools);
+      XMLInputFactory xif = XMLInputFactory.newInstance();
+      BpmnJsonConverter converter = new BpmnJsonConverter();
+      InputStream bpmnStream = new ByteArrayInputStream(data);   //byte[] 转换成 inputstrem
+      InputStreamReader in = new InputStreamReader(bpmnStream, "UTF-8");
+      XMLStreamReader xtr = xif.createXMLStreamReader(in);
+      BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
+      ObjectNode modelNode = converter.convertToJson(bpmnModel);
+      repositoryService.addModelEditorSource(modelId, modelNode.toString().getBytes("utf-8"));
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    } catch (XMLStreamException e) {
+      e.printStackTrace();
     }
   }
 
