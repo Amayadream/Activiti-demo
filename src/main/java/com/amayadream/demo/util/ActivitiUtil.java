@@ -99,13 +99,23 @@ public class ActivitiUtil {
             document = DocumentHelper.parseText(xml);
             //获取根节点元素对象
             Element definitions = document.getRootElement();    //根节点definitions
+//            definitions.addNamespace("activiti","xmlns:activiti=\"http://activiti.org/bpmn\"");
             Element process = definitions.element("process");   //二层节点process
             List<Element> userTasks = process.elements("userTask");     //用户任务,其中可以读取activiti:candidateGroups的属性,为角色组
             for (Element node : userTasks) {
+                writerDocumentToNewFile(document);
                 for(int i=0;i<=name.length-1;i++){
                     if(name[i].equals(node.attribute("name").getStringValue())){
-                        node.attribute("candidateGroups").setValue(groups[i]);
-                        node.element("documentation").setText(tools[i]);
+                        if(node.attribute("candidateGroups") != null){
+                            node.attribute("candidateGroups").setValue(groups[i]);
+                        }else{
+                            node.addAttribute("activiti:candidateGroups",groups[i]);
+                        }
+                        if(node.attribute("documentation") != null){
+                            node.element("documentation").setText(tools[i]);
+                        }else{
+                            node.addElement("documentation").setText(tools[i]);
+                        }
                     }
                 }
             }
