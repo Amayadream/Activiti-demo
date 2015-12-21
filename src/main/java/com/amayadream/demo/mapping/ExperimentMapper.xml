@@ -37,7 +37,7 @@
 	</select>
 
 	<!-- 插入用户 -->
-	<insert id="insert" parameterType="com.amayadream.demo.pojo.User" >
+	<insert id="insert" parameterType="com.amayadream.demo.pojo.Experiment" >
 		<selectKey keyProperty="id" resultType="String" order="BEFORE">
 			select sys_guid() from dual
 		</selectKey>
@@ -46,7 +46,7 @@
 	</insert>
 
 	<!-- 更新用户 -->
-	<update id="update" parameterType="com.amayadream.demo.pojo.User">
+	<update id="update" parameterType="com.amayadream.demo.pojo.Experiment">
 		UPDATE EXPERIMENT
 		<set>
 			<if test="userid != null and userid != ''">

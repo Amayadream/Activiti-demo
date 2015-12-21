@@ -99,11 +99,9 @@ public class ActivitiUtil {
             document = DocumentHelper.parseText(xml);
             //获取根节点元素对象
             Element definitions = document.getRootElement();    //根节点definitions
-//            definitions.addNamespace("activiti","xmlns:activiti=\"http://activiti.org/bpmn\"");
             Element process = definitions.element("process");   //二层节点process
             List<Element> userTasks = process.elements("userTask");     //用户任务,其中可以读取activiti:candidateGroups的属性,为角色组
             for (Element node : userTasks) {
-                writerDocumentToNewFile(document);
                 for(int i=0;i<=name.length-1;i++){
                     if(name[i].equals(node.attribute("name").getStringValue())){
                         if(node.attribute("candidateGroups") != null){
@@ -111,7 +109,7 @@ public class ActivitiUtil {
                         }else{
                             node.addAttribute("activiti:candidateGroups",groups[i]);
                         }
-                        if(node.attribute("documentation") != null){
+                        if(node.element("documentation") != null){
                             node.element("documentation").setText(tools[i]);
                         }else{
                             node.addElement("documentation").setText(tools[i]);
@@ -119,7 +117,8 @@ public class ActivitiUtil {
                     }
                 }
             }
-            return document.asXML();
+//            writerDocumentToNewFile(document);
+            return document.asXML();    //将dom4j的document对象转化成String
         } catch (DocumentException e) {     //返回null
             e.printStackTrace();
             return null;
@@ -142,6 +141,36 @@ public class ActivitiUtil {
         writer.write(document);
         writer.flush();
         writer.close();
+    }
+
+    /**
+     * 将document对象写入文件
+     * @param document
+     * @param url
+     * @return
+     */
+    public boolean writeDocumentToFile(Document document, String url){
+        try {
+            //输出格式
+            OutputFormat format = OutputFormat.createPrettyPrint();
+            //设置编码
+            format.setEncoding("utf-8");
+            //XMLWriter指定输出文件以及格式
+            XMLWriter writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(new File(url)),"utf-8"), format);
+            writer.write(document);
+            writer.flush();
+            writer.close();
+            return true;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public String getName() {
