@@ -12,6 +12,10 @@
   <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
 </head>
+<script>
+  var x = 1;
+  var input = '<input type="hidden" id="toolsindex'+index+'" name="asd">';
+</script>
 <body>
 <form action="<%=path%>/workflow/model/saveModel" method="post">
   <input type="hidden" id="id" name="id" value="${modelId}">
