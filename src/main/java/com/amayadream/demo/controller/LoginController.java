@@ -25,13 +25,15 @@ import java.util.List;
 public class LoginController {
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    @Autowired private IdentityService identityService;
+    @Autowired
+    private IdentityService identityService;
 
     /**
      * 登录系统
-     * @param username  用户名
-     * @param password  密码
-     * @param session   session
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @param session  session
      * @return
      */
     @RequestMapping(value = "/login")

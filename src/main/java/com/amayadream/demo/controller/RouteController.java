@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RouteController {
     @RequestMapping(value = "")
-    public String index(){
+    public String index() {
         return "/login";
     }
 
     @RequestMapping(value = "/login")
-    public String login(){
+    public String login() {
         return "/login";
     }
 
     @RequestMapping(value = "/show")
-    public String show(){
+    public String show() {
         return "/show";
     }
 
     @RequestMapping(value = "/running")
-    public String running(){
+    public String running() {
         return "/running";
     }
 
     @RequestMapping(value = "/finished")
-    public String finished(){
+    public String finished() {
         return "/finished";
     }
 

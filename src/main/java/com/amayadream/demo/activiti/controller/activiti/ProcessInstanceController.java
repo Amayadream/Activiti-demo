@@ -42,12 +42,13 @@ public class ProcessInstanceController {
 
     /**
      * 查询所有流程
-     * @param model     model
-     * @param request   request
+     *
+     * @param model   model
+     * @param request request
      * @return
      */
     @RequestMapping(value = "process-list")
-    public ModelAndView all(Model model, HttpServletRequest request){
+    public ModelAndView all(Model model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("/all-process-list");
         Page<ProcessDefinition> page = new Page<ProcessDefinition>(PageUtil.PAGE_SIZE);
         int[] pageParams = PageUtil.init(page, request);
@@ -67,8 +68,7 @@ public class ProcessInstanceController {
             Map<String, Object> variables = new HashMap<String, Object>();
             ProcessInstance processInstance = workflowService.start(id, experiment, variables);
             redirectAttributes.addFlashAttribute("message", "流程已启动，流程ID：" + processInstance.getId());
-        }
-        catch (ActivitiException e) {
+        } catch (ActivitiException e) {
             if (e.getMessage().indexOf("no processes deployed with key") != -1) {
                 redirectAttributes.addFlashAttribute("error", "没有部署流程，请在[工作流]->[流程管理]页面点击<重新部署流程>");
             } else {
@@ -78,43 +78,45 @@ public class ProcessInstanceController {
         return "redirect:/experiment/list/task";
     }
 
-  /**
-   * 查询所有运行中的流程
-   * @param model
-   * @param request
-   * @return
+    /**
+     * 查询所有运行中的流程
+     *
+     * @param model
+     * @param request
+     * @return
      */
-  @RequestMapping(value = "running")
-  public ModelAndView running(Model model, HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("running-manage");
-    Page<ProcessInstance> page = new Page<ProcessInstance>(PageUtil.PAGE_SIZE);
-    int[] pageParams = PageUtil.init(page, request);
+    @RequestMapping(value = "running")
+    public ModelAndView running(Model model, HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView("running-manage");
+        Page<ProcessInstance> page = new Page<ProcessInstance>(PageUtil.PAGE_SIZE);
+        int[] pageParams = PageUtil.init(page, request);
 
-    ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
-    List<ProcessInstance> list = processInstanceQuery.listPage(pageParams[0], pageParams[1]);
-    page.setResult(list);
-    page.setTotalCount(processInstanceQuery.count());
-    mav.addObject("page", page);
-    return mav;
-  }
-
-  /**
-   * 挂起、激活流程实例
-   * @param state
-   * @param processInstanceId
-   * @param redirectAttributes
-   * @return
-   */
-  @RequestMapping(value = "update/{state}/{processInstanceId}")
-  public String updateState(@PathVariable("state") String state, @PathVariable("processInstanceId") String processInstanceId,
-                            RedirectAttributes redirectAttributes) {
-    if (state.equals("active")) {
-      redirectAttributes.addFlashAttribute("message", "已激活ID为[" + processInstanceId + "]的流程实例。");
-      runtimeService.activateProcessInstanceById(processInstanceId);
-    } else if (state.equals("suspend")) {
-      runtimeService.suspendProcessInstanceById(processInstanceId);
-      redirectAttributes.addFlashAttribute("message", "已挂起ID为[" + processInstanceId + "]的流程实例。");
+        ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
+        List<ProcessInstance> list = processInstanceQuery.listPage(pageParams[0], pageParams[1]);
+        page.setResult(list);
+        page.setTotalCount(processInstanceQuery.count());
+        mav.addObject("page", page);
+        return mav;
     }
-    return "redirect:/workflow/processinstance/running";
-  }
+
+    /**
+     * 挂起、激活流程实例
+     *
+     * @param state
+     * @param processInstanceId
+     * @param redirectAttributes
+     * @return
+     */
+    @RequestMapping(value = "update/{state}/{processInstanceId}")
+    public String updateState(@PathVariable("state") String state, @PathVariable("processInstanceId") String processInstanceId,
+                              RedirectAttributes redirectAttributes) {
+        if (state.equals("active")) {
+            redirectAttributes.addFlashAttribute("message", "已激活ID为[" + processInstanceId + "]的流程实例。");
+            runtimeService.activateProcessInstanceById(processInstanceId);
+        } else if (state.equals("suspend")) {
+            runtimeService.suspendProcessInstanceById(processInstanceId);
+            redirectAttributes.addFlashAttribute("message", "已挂起ID为[" + processInstanceId + "]的流程实例。");
+        }
+        return "redirect:/workflow/processinstance/running";
+    }
 }
